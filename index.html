@@ -707,7 +707,7 @@ Section 3 (4:00-5:30):
 VPN Segment (5:30-6:30):
 Outro (6:30-7:30):`;
   try {
-    const resp=await fetch('/.netlify/functions/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,apiKey:state.settings.claudeApiKey})});
+    const resp=await fetch('/.netlify/functions/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({videoContext:prompt,apiKey:state.settings.claudeApiKey})});
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error||'API error '+resp.status);
     const parsed=parseAnalysis(data.text||'');
