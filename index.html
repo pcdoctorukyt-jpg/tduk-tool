@@ -749,7 +749,14 @@ function renderAnalysisResult(a,videoId){
         ${lst('5 TDUK title ideas',a.titleIdeas,'📝')}${lst('5 thumbnail text ideas',a.thumbnailTexts,'🎨')}
       </div>
       <div style="padding:16px">
-        ${sec('TDUK script outline',a.scriptOutline,'📋')}
+        <div class="analysis-section">
+          <div class="analysis-label">📋 TDUK script outline</div>
+          ${(()=>{
+            const lines=(a.scriptOutline||'').split('\n').map(l=>cleanMd(l.trim())).filter(Boolean);
+            if(!lines.length) return '<div style="color:var(--text3);font-size:13px">No script outline generated</div>';
+            return '<ul class="analysis-list">'+lines.map(l=>`<li style="padding:5px 0 5px 16px">${esc(l)}</li>`).join('')+'</ul>';
+          })()}
+        </div>
       </div>
     </div>
     <div style="padding:10px 16px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end">
