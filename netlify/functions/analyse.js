@@ -1,9 +1,9 @@
 const https = require('https');
 
-function callClaude(prompt, apiKey) {
+function callClaude(prompt, apiKey, maxTokens) {
   const payload = JSON.stringify({
     model: 'claude-haiku-4-5-20251001',
-    max_tokens: 1500,
+    max_tokens: maxTokens || 1200,
     messages: [{ role: 'user', content: prompt }]
   });
   return new Promise((resolve, reject) => {
@@ -50,28 +50,35 @@ exports.handler = async (event) => {
   const { videoContext, apiKey } = body;
   if (!apiKey) return { statusCode: 400, headers: cors, body: JSON.stringify({ error: 'Missing API key' }) };
 
-  try {
-    const ctx = videoContext || body.prompt || '';
+  const ctx = videoContext || '';
 
-    // Call 1 — strategy analysis
-    const strategyPrompt = `You are a YouTube strategist for TDUK (Tech Doctor UK) — a Firestick/Fire TV/Android TV/VPN channel.
+  // Prompt 1: strategy (concise)
+  const p1 = `YouTube strategist for TDUK (Firestick/Fire TV/VPN channel). Analyse this video briefly.
 
 ${ctx}
 
-Reply using EXACTLY these headers, be concise:
+Use EXACTLY these headers, one short answer each:
 
 WHY IT'S WORKING:
 MAIN HOOK:
 EMOTIONAL TRIGGER:
 RETENTION HOOKS:
-- hook 1
-- hook 2
-- hook 3
+- 
+- 
+- 
 THUMBNAIL STRATEGY:
 TITLE STRATEGY:
 RISK LEVEL FOR TDUK:
 BEST TDUK ANGLE:
-VPN CTA ANGLE:
+VPN CTA ANGLE:`;
+
+  // Prompt 2: titles and thumbnails
+  const p2 = `YouTube strategist for TDUK (Firestick/Fire TV/VPN channel).
+
+${ctx}
+
+Give ONLY these, nothing else:
+
 5 TDUK TITLE IDEAS:
 1.
 2.
@@ -85,33 +92,33 @@ VPN CTA ANGLE:
 4.
 5.`;
 
-    // Call 2 — script outline only
-    const scriptPrompt = `You are a YouTube scriptwriter for TDUK (Tech Doctor UK) — a Firestick/Fire TV/Android TV/VPN channel.
+  // Prompt 3: script outline only — dedicated call with plenty of tokens
+  const p3 = `You are writing a YouTube script outline for TDUK (Tech Doctor UK), a Firestick and streaming device channel.
 
 ${ctx}
 
-Write a detailed 6-8 minute script outline for a TDUK video on this topic. Use this exact format:
+Write a detailed 6-8 minute script outline. Each section must have 2-3 sentences of detail. Use this exact format:
 
 TDUK SCRIPT OUTLINE:
-Intro (0:00-0:45): [Opening hook, what viewer will learn, why it matters to them]
-Section 1 (0:45-2:30): [First key point with specific details]
-Section 2 (2:30-4:00): [Second key point with specific details]
-Section 3 (4:00-5:30): [Third key point with specific details]
-VPN Segment (5:30-6:30): [Natural VPN CTA integration tied to the topic]
-Outro (6:30-7:30): [Summary, subscribe CTA, next video tease]`;
+Intro (0:00-0:45): [Hook line. What viewer will learn. Why it matters to them specifically.]
+Section 1 (0:45-2:30): [What to cover. Specific talking points. Any visuals or demos needed.]
+Section 2 (2:30-4:00): [What to cover. Specific talking points. Any visuals or demos needed.]
+Section 3 (4:00-5:30): [What to cover. Specific talking points. Any visuals or demos needed.]
+VPN Segment (5:30-6:30): [How to naturally introduce VPN. Specific angle tied to this topic. Suggested CTA wording.]
+Outro (6:30-7:30): [Key takeaways to recap. Subscribe prompt. Tease of next video.]`;
 
-    // Run both calls in parallel
-    const [strategyText, scriptText] = await Promise.all([
-      callClaude(strategyPrompt, apiKey),
-      callClaude(scriptPrompt, apiKey)
+  try {
+    const [t1, t2, t3] = await Promise.all([
+      callClaude(p1, apiKey, 800),
+      callClaude(p2, apiKey, 400),
+      callClaude(p3, apiKey, 1000)
     ]);
 
     return {
       statusCode: 200,
       headers: cors,
-      body: JSON.stringify({ text: strategyText + '\n' + scriptText })
+      body: JSON.stringify({ text: t1 + '\n' + t2 + '\n' + t3 })
     };
-
   } catch(e) {
     return { statusCode: 500, headers: cors, body: JSON.stringify({ error: e.message }) };
   }
