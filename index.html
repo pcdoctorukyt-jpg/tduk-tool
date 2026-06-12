@@ -547,70 +547,42 @@ window.runAiAnalysis=async function(videoId){
   const ch=state.channels.find(c=>c.id===v.channelId);
   const avg=ch?ch.avgViews:50000;
   const ratio=((v.views/avg)).toFixed(1);
-  const prompt=`You are a YouTube strategy expert for TDUK (Tech Doctor UK), a channel focused on Firestick, Fire TV, Android TV, Google TV, streaming devices, privacy settings, VPN education, and device updates.
+  const prompt=`You are a YouTube strategist for TDUK (Tech Doctor UK) — a Firestick/Fire TV/Android TV/VPN channel. Analyse this competitor video and give a TDUK content brief. Be concise.
 
-Analyse this competitor video and create a full TDUK content brief. DO NOT copy the competitor script. Create a fresh, original TDUK version of the topic only.
+VIDEO: "${v.title}" by ${v.channelName} — ${fmtNum(v.views)} views (${ratio}× their average), ${videoAge(v.uploadDate)}
+${v.description?'DESC: '+v.description.substring(0,200):''}
+${v.transcript?'TRANSCRIPT: '+v.transcript.substring(0,500):''}
 
-COMPETITOR VIDEO:
-Title: ${v.title}
-Channel: ${v.channelName} (avg ${fmtNum(avg)} views/video)
-Views: ${fmtNum(v.views)} (${ratio}× channel average)
-Age: ${videoAge(v.uploadDate)}
-Description: ${v.description||'Not provided'}
-${v.transcript?`Transcript:\n${v.transcript.substring(0,1500)}`:''}
-
-Use these exact section headers in your response:
+Reply using EXACTLY these headers, one line each:
 
 WHY IT'S WORKING:
-[2-3 sentences]
-
 MAIN HOOK:
-[One sentence]
-
 EMOTIONAL TRIGGER:
-[One sentence]
-
 RETENTION HOOKS:
-- [Hook 1]
-- [Hook 2]
-- [Hook 3]
-
 THUMBNAIL STRATEGY:
-[2 sentences]
-
 TITLE STRATEGY:
-[2 sentences]
-
 RISK LEVEL FOR TDUK:
-[Low / Medium / High and brief reason]
-
 BEST TDUK ANGLE:
-[Specific, concrete angle for TDUK to take]
-
 VPN CTA ANGLE:
-[How to naturally work in a VPN recommendation]
-
 5 TDUK TITLE IDEAS:
-1. [Title]
-2. [Title]
-3. [Title]
-4. [Title]
-5. [Title]
-
+1.
+2.
+3.
+4.
+5.
 5 THUMBNAIL TEXT IDEAS:
-1. [Text]
-2. [Text]
-3. [Text]
-4. [Text]
-5. [Text]
-
+1.
+2.
+3.
+4.
+5.
 TDUK SCRIPT OUTLINE (6-8 min):
-Intro (0:00-0:45): [Hook and viewer promise]
-Section 1 (0:45-2:30): [First key point]
-Section 2 (2:30-4:00): [Second key point]
-Section 3 (4:00-5:30): [Third key point]
-VPN Segment (5:30-6:30): [Natural VPN CTA]
-Outro (6:30-7:30): [CTA and close]`;
+Intro (0:00-0:45):
+Section 1 (0:45-2:30):
+Section 2 (2:30-4:00):
+Section 3 (4:00-5:30):
+VPN Segment (5:30-6:30):
+Outro (6:30-7:30):`;
 
   try {
     const resp = await fetch('/.netlify/functions/analyse', {
@@ -632,7 +604,8 @@ Outro (6:30-7:30): [CTA and close]`;
 };
 
 function parseAnalysis(text){
-  const extract=label=>{ const m=text.match(new RegExp(label+':\\s*([\\s\\S]*?)(?=\\n[A-Z0-9 \'\\-]+:|$)','i')); return m?m[1].trim():''; };
+  const clean=text.replace(/^##\s*/gm,'').replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1');
+  const extract=label=>{ const m=clean.match(new RegExp(label+':\\s*([\\s\\S]*?)(?=\\n[A-Z0-9 \'\\-]+:|$)','i')); return m?m[1].trim():''; };
   const extractList=label=>{ return extract(label).split('\n').map(l=>l.replace(/^[\d\-\*\•\.]+\s*/,'').trim()).filter(Boolean); };
   return {
     whyWorking:extract('WHY IT\'S WORKING'),mainHook:extract('MAIN HOOK'),emotionalTrigger:extract('EMOTIONAL TRIGGER'),
@@ -642,10 +615,18 @@ function parseAnalysis(text){
   };
 }
 
+function cleanMd(s){ return s?s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():''; }
+
 function renderAnalysisResult(a,videoId){
   if(!a) return '';
-  const sec=(lbl,val,icon)=>val?`<div class="analysis-section"><div class="analysis-label">${icon} ${lbl}</div><div class="analysis-value">${esc(val)}</div></div>`:'';
-  const lst=(lbl,items,icon)=>items?.length?`<div class="analysis-section"><div class="analysis-label">${icon} ${lbl}</div><ul class="analysis-list">${items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:'';
+  const sec=(lbl,val,icon)=>{
+    const v=cleanMd(val);
+    return v?`<div class="analysis-section"><div class="analysis-label">${icon} ${lbl}</div><div class="analysis-value">${esc(v)}</div></div>`:'';
+  };
+  const lst=(lbl,items,icon)=>{
+    const clean=items?.map(i=>cleanMd(i)).filter(Boolean);
+    return clean?.length?`<div class="analysis-section"><div class="analysis-label">${icon} ${lbl}</div><ul class="analysis-list">${clean.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:'';
+  };
   return `<div style="border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
     <div style="display:grid;grid-template-columns:1fr 1fr">
       <div style="padding:16px;border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border)">
