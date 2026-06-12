@@ -20,8 +20,8 @@ exports.handler = async (event) => {
   if (!apiKey) return { statusCode: 400, headers: cors, body: JSON.stringify({ error: 'Missing API key' }) };
 
   const payload = JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 800,
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }]
   });
 
