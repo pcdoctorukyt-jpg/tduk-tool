@@ -662,26 +662,63 @@ window.runAiAnalysis=async function(videoId){
   const v=state.videos.find(x=>x.id===videoId); if(!v) return;
   if(!state.settings.claudeApiKey){ notify('Add your Claude API key in Settings first','error'); closeModal(); showPage('settings'); return; }
   const aa=document.getElementById('analysis-area-'+videoId);
-  if(aa) aa.innerHTML=`<div style="text-align:center;padding:36px 20px"><div style="font-size:32px;margin-bottom:10px">🤖</div><div style="font-size:14px;font-weight:700" class="loading-dots">Generating TDUK content brief</div><div style="font-size:12px;color:var(--text3);margin-top:6px">Usually takes 10–15 seconds...</div><div class="progress-bar" style="max-width:220px;margin:14px auto 0"><div class="progress-fill"></div></div></div>`;
+
+  const updateStatus=(msg,step)=>{
+    if(aa) aa.innerHTML=`<div style="text-align:center;padding:36px 20px">
+      <div style="font-size:32px;margin-bottom:10px">🤖</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px">${msg}</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Step ${step} of 2</div>
+      <div style="max-width:200px;margin:0 auto;background:var(--bg2);border-radius:4px;height:6px;overflow:hidden">
+        <div style="height:100%;background:#185fa5;border-radius:4px;width:${step===1?'50%':'90%'};transition:width .3s"></div>
+      </div>
+    </div>`;
+  };
+
   const ch=state.channels.find(c=>c.id===v.channelId);
   const avg=ch?ch.avgViews:50000;
   const ratio=((v.views/avg)).toFixed(1);
-  const prompt=`You are a YouTube strategist for TDUK (Tech Doctor UK) — a Firestick/Fire TV/Android TV/VPN channel. Analyse this competitor video and give a TDUK content brief. Be concise but complete.
+  const ctx=`VIDEO: "${v.title}" by ${v.channelName}
+Views: ${fmtNum(v.views)} (${ratio}x their ${fmtNum(avg)} average) | Age: ${videoAge(v.uploadDate)}
+${v.description?'Description: '+v.description.substring(0,300):''}
+${v.transcript?'Transcript: '+v.transcript.substring(0,600):''}`;
 
-VIDEO: "${v.title}" by ${v.channelName}
-Views: ${fmtNum(v.views)} (${ratio}× their ${fmtNum(avg)} average) · Age: ${videoAge(v.uploadDate)}
-${v.description?'DESC: '+v.description.substring(0,300):''}
-${v.transcript?'TRANSCRIPT: '+v.transcript.substring(0,800):''}
+  // Direct Anthropic API call from browser — no proxy, no Netlify function
+  async function callAI(prompt, maxTokens){
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': state.settings.claudeApiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens: maxTokens,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.error?.message||'API error '+r.status);
+    return d.content?.[0]?.text||'';
+  }
 
-Reply using EXACTLY these headers:
+  try {
+    updateStatus('Analysing video strategy...', 1);
+
+    const strategyPrompt=`You are a YouTube strategist for TDUK (Tech Doctor UK) — a Firestick/Fire TV/Android TV/VPN channel.
+
+${ctx}
+
+Reply using EXACTLY these headers, be concise:
 
 WHY IT'S WORKING:
 MAIN HOOK:
 EMOTIONAL TRIGGER:
 RETENTION HOOKS:
-- hook 1
-- hook 2
-- hook 3
+- 
+- 
+- 
 THUMBNAIL STRATEGY:
 TITLE STRATEGY:
 RISK LEVEL FOR TDUK:
@@ -698,7 +735,18 @@ VPN CTA ANGLE:
 2.
 3.
 4.
-5.
+5.`;
+
+    const strategyText = await callAI(strategyPrompt, 1000);
+
+    updateStatus('Writing script outline...', 2);
+
+    const scriptPrompt=`You are a YouTube scriptwriter for TDUK (Tech Doctor UK) — a Firestick/streaming/VPN channel.
+
+${ctx}
+
+Write a COMPLETE 6-8 minute script outline. Every section MUST have 2-3 sentences. Do not stop early.
+
 TDUK SCRIPT OUTLINE:
 Intro (0:00-0:45):
 Section 1 (0:45-2:30):
@@ -706,15 +754,15 @@ Section 2 (2:30-4:00):
 Section 3 (4:00-5:30):
 VPN Segment (5:30-6:30):
 Outro (6:30-7:30):`;
-  try {
-    const resp=await fetch('/.netlify/functions/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({videoContext:prompt,apiKey:state.settings.claudeApiKey})});
-    const data=await resp.json();
-    if(!resp.ok) throw new Error(data.error||'API error '+resp.status);
-    const parsed=parseAnalysis(data.text||'');
+
+    const scriptText = await callAI(scriptPrompt, 1200);
+
+    const parsed=parseAnalysis(strategyText + '\n' + scriptText);
     state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:parsed}:v2);
     saveState();
     if(aa) aa.innerHTML=renderAnalysisResult(parsed,videoId);
     notify('Analysis complete!','success');
+
   } catch(e){
     if(aa) aa.innerHTML=`<div style="text-align:center;padding:20px"><div style="color:#a32d2d;margin-bottom:12px">⚠️ ${esc(e.message)}</div><button class="btn primary" onclick="runAiAnalysis('${videoId}')">Try again</button></div>`;
     notify('Failed: '+e.message,'error');
