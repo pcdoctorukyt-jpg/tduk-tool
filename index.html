@@ -134,6 +134,7 @@ tr:hover td{background:var(--bg2)}
       <div class="topbar-title" id="page-title">Dashboard</div>
       <div style="display:flex;gap:8px">
         <button class="btn" onclick="rescoreAll()" id="rescore-btn">🔄 Re-score All</button>
+        <button class="btn success" onclick="fetchAllChannels()" id="fetch-all-btn">⬇️ Fetch All Channels</button>
         <button class="btn primary" onclick="showPage('opportunities')">🎯 Opportunities</button>
       </div>
     </div>
@@ -215,6 +216,53 @@ function scoreVideo(video, channel){
     policyRisk: Math.round(policyRisk),
     vpnPotential: Math.round(vpnPotential)
   }};
+}
+
+async function fetchAllChannels(){
+  if(!state.settings.youtubeApiKey){ notify('Add your YouTube API key in Settings first','error'); return; }
+  if(!state.channels.length){ notify('No channels added yet — go to Channels to add some','error'); return; }
+  const btn=document.getElementById('fetch-all-btn');
+  btn.disabled=true;
+  let totalAdded=0, totalUpdated=0, failed=[];
+  for(let i=0; i<state.channels.length; i++){
+    const ch=state.channels[i];
+    btn.textContent=`⬇️ Fetching ${i+1}/${state.channels.length}: ${ch.name}...`;
+    try {
+      const resp=await fetch('/.netlify/functions/youtube',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'fetchVideos',channelId:ch.youtubeChannelId,apiKey:state.settings.youtubeApiKey})
+      });
+      const data=await resp.json();
+      if(!resp.ok) throw new Error(data.error||'Fetch failed');
+      const newVideos=data.videos||[];
+      if(newVideos.length>0){
+        const avgViews=Math.round(newVideos.reduce((s,v)=>s+v.views,0)/newVideos.length);
+        state.channels=state.channels.map(c=>c.id===ch.id?{...c,avgViews}:c);
+      }
+      newVideos.forEach(v=>{
+        const existing=state.videos.find(x=>x.youtubeId===v.youtubeId);
+        const scored=scoreVideo(v,ch);
+        if(existing){
+          state.videos=state.videos.map(x=>x.youtubeId===v.youtubeId?{...x,...v,...scored}:x);
+          totalUpdated++;
+        } else {
+          state.videos.push({id:'v'+Date.now()+Math.random(),channelId:ch.id,channelName:ch.name,transcript:'',analysis:null,...v,...scored});
+          totalAdded++;
+        }
+      });
+    } catch(e){
+      failed.push(ch.name);
+    }
+  }
+  state.settings.lastRefresh=new Date().toISOString();
+  saveState();
+  btn.disabled=false;
+  btn.textContent='⬇️ Fetch All Channels';
+  updateRefreshLabel();
+  const failMsg=failed.length?` (${failed.length} failed: ${failed.join(', ')})`:'';
+  notify(`✅ Done — ${totalAdded} new videos, ${totalUpdated} updated across ${state.channels.length} channels${failMsg}`,'success');
+  showPage(document.querySelector('.nav-item.active')?.id?.replace('nav-','')||'dashboard');
 }
 
 function rescoreAll(){
