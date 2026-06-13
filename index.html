@@ -6,7 +6,7 @@
 <title>TDUK Viral Topic Finder</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a18;font-size:14px;line-height:1.5}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:var(--text);font-size:14px;line-height:1.5}
 :root{--bg:#fff;--bg2:#f5f5f3;--text:#1a1a18;--text2:#5f5e5a;--text3:#888780;--border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);--radius:8px;--radius-lg:12px;}
 @media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#242422;--text:#e8e6df;--text2:#a8a69f;--text3:#666461;--border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);}body{background:#141412}}
 .layout{display:flex;height:100vh;overflow:hidden}
@@ -18,15 +18,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a
 .nav-section{padding:14px 14px 4px;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);margin:1px 6px;cursor:pointer;color:var(--text2);font-size:13px;transition:background .15s;border:none;background:none;width:calc(100% - 12px);text-align:left}
 .nav-item:hover{background:var(--bg2)}
-.nav-item.active{background:#e6f1fb;color:#185fa5}
-.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10}
+.nav-item.active{background:rgba(24,95,165,0.15);color:#6ab0f5}
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text)}
 .content{padding:20px 24px;flex:1}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;transition:background .15s;font-family:inherit;white-space:nowrap;text-decoration:none}
 .btn:hover{background:var(--bg2)}
-.btn.primary{background:#e6f1fb;color:#185fa5;border-color:transparent}
-.btn.primary:hover{background:#d0e8f8}
-.btn.success{background:#eaf3de;color:#3b6d11;border-color:transparent}
+.btn.primary{background:rgba(24,95,165,0.15);color:#6ab0f5;border-color:transparent}
+.btn.primary:hover{background:rgba(74,158,47,0.3)}
+.btn.success{background:rgba(74,158,47,0.2);color:#7ecf5a;border-color:rgba(74,158,47,0.3)}
 .btn.danger{background:#fcebeb;color:#a32d2d;border-color:transparent}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px}
@@ -36,22 +36,22 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a
 .metric-label{font-size:12px;color:var(--text3);margin-bottom:4px}
 .metric-value{font-size:24px;font-weight:700;color:var(--text)}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
-.badge.make-now{background:#eaf3de;color:#27500a}
-.badge.watch{background:#faeeda;color:#633806}
-.badge.ignore{background:var(--bg2);color:var(--text3)}
-.badge.policy-risk{background:#fcebeb;color:#791f1f}
-.badge.low-risk{background:#eaf3de;color:#27500a}
-.badge.med-risk{background:#faeeda;color:#633806}
-.badge.high-risk{background:#fcebeb;color:#791f1f}
+.badge.make-now{background:rgba(74,158,47,0.15);color:#7ecf5a}
+.badge.watch{background:rgba(240,160,64,0.2);color:#f0a040}
+.badge.ignore{background:var(--bg2);color:var(--text2)}
+.badge.policy-risk{background:rgba(224,85,85,0.2);color:#e05555}
+.badge.low-risk{background:rgba(74,158,47,0.15);color:#7ecf5a}
+.badge.med-risk{background:rgba(240,160,64,0.2);color:#f0a040}
+.badge.high-risk{background:rgba(224,85,85,0.2);color:#e05555}
 .score-bar{height:6px;border-radius:3px;background:var(--bg2);overflow:hidden}
 .score-fill{height:100%;border-radius:3px}
-.score-high{background:#639922}.score-med{background:#ba7517}.score-low{background:#e24b4a}
+.score-high{background:#7ecf5a}.score-med{background:#ba7517}.score-low{background:#e24b4a}
 .video-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .15s,transform .15s}
 .video-card:hover{border-color:var(--border2);transform:translateY(-1px)}
 .thumb-wrap{position:relative;background:var(--bg2);aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .thumb-wrap img{width:100%;height:100%;object-fit:cover}
 .thumb-placeholder{font-size:36px}
-.score-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
+.score-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.85);color:#7ecf5a;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
 .video-info{padding:12px 14px}
 .video-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
 .video-meta{font-size:11px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
@@ -78,7 +78,7 @@ tr:hover td{background:var(--bg2)}
 .modal-footer{padding:14px 22px;border-top:0.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
 .analysis-section{margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)}
 .analysis-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.analysis-label{font-size:10px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.analysis-label{font-size:10px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
 .analysis-value{font-size:13px;line-height:1.65;color:var(--text)}
 .analysis-list{list-style:none;padding:0}
 .analysis-list li{font-size:13px;line-height:1.65;padding:3px 0 3px 16px;color:var(--text);position:relative}
@@ -91,10 +91,10 @@ tr:hover td{background:var(--bg2)}
 .notification{position:fixed;bottom:24px;right:24px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 18px;font-size:13px;z-index:300;box-shadow:0 4px 24px rgba(0,0,0,0.15);max-width:320px;animation:slideIn .2s ease}
 @keyframes slideIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
 .banner{border-radius:var(--radius);padding:10px 16px;font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.banner.warn{background:#faeeda;border:0.5px solid #ba7517;color:#633806}
-.banner.info{background:#e6f1fb;border:0.5px solid #185fa5;color:#185fa5}
+.banner.warn{background:rgba(240,160,64,0.15);border:0.5px solid #f0a040;color:#f0a040}
+.banner.info{background:rgba(74,158,47,0.15);border:0.5px solid #4a9e2f;color:#7ecf5a}
 .divider{height:0.5px;background:var(--border);margin:16px 0}
-.report-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:12px}
+.report-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:12px;border-left:3px solid #7ecf5a}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:0.5px solid var(--border)}
 .settings-row:last-child{border-bottom:none}
 .ch-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:14px}
@@ -240,7 +240,7 @@ function videoCard(v){
         <span>📡 ${esc(v.channelName)}</span>
         <span>👁 ${fmtNum(v.views)}</span>
         <span>🕐 ${videoAge(v.uploadDate)}</span>
-        <span style="color:${parseFloat(ratio)>=3?'#3b6d11':parseFloat(ratio)>=1.5?'#854f0b':'var(--text3)'}">📈 ${ratio}× avg</span>
+        <span style="color:${parseFloat(ratio)>=3?'#7ecf5a':parseFloat(ratio)>=1.5?'#f0a040':'var(--text3)'}">📈 ${ratio}× avg</span>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
         <span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span>
@@ -264,12 +264,12 @@ function renderDashboard(c){
     ${noKey?`<div class="banner warn">⚙️ <div><strong>Setup required</strong> — Add your Claude and YouTube API keys in <button class="btn" style="padding:2px 8px;font-size:12px;margin-left:6px" onclick="showPage('settings')">Settings →</button></div></div>`:''}
     <div class="grid-4" style="margin-bottom:20px">
       <div class="metric-card"><div class="metric-label">Channels tracked</div><div class="metric-value">${state.channels.length}</div></div>
-      <div class="metric-card"><div class="metric-label">🔥 Make now</div><div class="metric-value" style="color:#3b6d11">${vids.filter(v=>v.flag==='MAKE NOW').length}</div></div>
-      <div class="metric-card"><div class="metric-label">👀 Watch</div><div class="metric-value" style="color:#854f0b">${vids.filter(v=>v.flag==='WATCH').length}</div></div>
-      <div class="metric-card"><div class="metric-label">⚠️ Policy risk</div><div class="metric-value" style="color:#a32d2d">${vids.filter(v=>v.flag==='POLICY RISK').length}</div></div>
+      <div class="metric-card"><div class="metric-label">🔥 Make now</div><div class="metric-value" style="color:#7ecf5a">${vids.filter(v=>v.flag==='MAKE NOW').length}</div></div>
+      <div class="metric-card"><div class="metric-label">👀 Watch</div><div class="metric-value" style="color:#f0a040">${vids.filter(v=>v.flag==='WATCH').length}</div></div>
+      <div class="metric-card"><div class="metric-label">⚠️ Policy risk</div><div class="metric-value" style="color:#e05555">${vids.filter(v=>v.flag==='POLICY RISK').length}</div></div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
-      <div><div class="section-title">Top opportunities right now</div><div class="section-sub">Videos outperforming their channel average — sorted by opportunity score</div></div>
+      <div><div class="section-title" style="color:var(--text)">Top opportunities right now</div><div class="section-sub">Videos outperforming their channel average — sorted by opportunity score</div></div>
       <button class="btn primary" onclick="showPage('opportunities')">View all →</button>
     </div>
     ${top.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">${top.map(videoCard).join('')}</div>`
@@ -316,13 +316,13 @@ function renderDailyReport(c){
     else angle='📺 This Happened on Firestick and Most Users Don\'t Know';
     return `<div class="report-card">
       <div style="display:flex;gap:14px;align-items:flex-start">
-        <div style="font-size:24px;font-weight:700;color:var(--text3);min-width:32px">#${rank}</div>
+        <div style="font-size:24px;font-weight:700;color:#7ecf5a;min-width:32px">#${rank}</div>
         <div style="flex:1">
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span><span class="badge ${pr.cls}">${pr.label}</span><span style="font-size:12px;color:var(--text3);align-self:center">Score: ${v.score}/100</span></div>
-          <div style="font-weight:700;margin-bottom:4px">${esc(v.title)}</div>
-          <div style="font-size:12px;color:var(--text3);margin-bottom:10px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · 📈 ${ratio}× avg</div>
-          <div style="background:#eaf3de;color:#27500a;border-radius:var(--radius);padding:8px 12px;margin-bottom:8px;font-size:12px"><strong>Why outperforming:</strong> ${esc(reasons.join(' · '))}</div>
-          <div style="background:#e6f1fb;color:#185fa5;border-radius:var(--radius);padding:8px 12px;margin-bottom:10px;font-size:12px"><strong>TDUK angle:</strong> ${esc(angle)}</div>
+          <div style="font-weight:700;margin-bottom:4px;color:var(--text);font-size:14px">${esc(v.title)}</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · 📈 ${ratio}× avg</div>
+          <div style="background:rgba(74,158,47,0.15);color:#7ecf5a;border-radius:var(--radius);padding:8px 12px;margin-bottom:8px;font-size:12px"><strong>Why outperforming:</strong> ${esc(reasons.join(' · '))}</div>
+          <div style="background:rgba(24,95,165,0.15);color:#6ab0f5;border-radius:var(--radius);padding:8px 12px;margin-bottom:10px;font-size:12px"><strong>TDUK angle:</strong> ${esc(angle)}</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button class="btn primary" style="font-size:12px;padding:5px 12px" onclick="openVideoModal('${v.id}')">🤖 Full AI Analysis</button>
             <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:12px;padding:5px 12px">▶ Watch original</a>
@@ -332,12 +332,12 @@ function renderDailyReport(c){
     </div>`;
   };
   c.innerHTML=`
-    <div class="card" style="margin-bottom:20px;border-left:3px solid #185fa5">
-      <div style="font-size:18px;font-weight:700;margin-bottom:4px">${today}</div>
+    <div class="card" style="margin-bottom:20px;border-left:3px solid #4a9e2f">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;color:var(--text)">${today}</div>
       <div style="font-size:13px;color:var(--text2)">${makeNow.length} make-now · ${watch.length} to watch · ${state.videos.length} total videos tracked</div>
     </div>
-    ${makeNow.length?`<div class="section-title" style="margin-bottom:12px">🔥 Make these now</div>${makeNow.map((v,i)=>rCard(v,i+1)).join('')}`:`<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-text">No make-now videos yet</div><div style="font-size:13px">Fetch videos from competitor channels to find opportunities</div></div>`}
-    ${watch.length?`<div class="section-title" style="margin-top:20px;margin-bottom:12px">👀 Keep watching</div>${watch.map((v,i)=>rCard(v,i+1)).join('')}`:''}`;
+    ${makeNow.length?`<div class="section-title" style="margin-bottom:12px;color:var(--text)">🔥 Make these now</div>${makeNow.map((v,i)=>rCard(v,i+1)).join('')}`:`<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-text">No make-now videos yet</div><div style="font-size:13px">Fetch videos from competitor channels to find opportunities</div></div>`}
+    ${watch.length?`<div class="section-title" style="margin-top:20px;margin-bottom:12px;color:var(--text)">👀 Keep watching</div>${watch.map((v,i)=>rCard(v,i+1)).join('')}`:''}`;
 }
 
 function renderChannels(c){
@@ -357,7 +357,7 @@ function renderChannels(c){
         return `<div class="ch-card">
           ${ch.thumbnail?`<img class="ch-avatar" src="${esc(ch.thumbnail)}" alt="">`:`<div class="ch-avatar">📺</div>`}
           <div class="ch-info">
-            <div class="ch-name">${esc(ch.name)}</div>
+            <div class="ch-name" style="color:var(--text)">${esc(ch.name)}</div>
             <div class="ch-meta">${fmtNum(ch.subscribers)} subscribers · avg ${fmtNum(ch.avgViews)} views · ${vids.length} videos tracked${makeNow?` · <span style="color:#3b6d11;font-weight:700">${makeNow} make-now</span>`:''}</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -383,13 +383,13 @@ function renderVideos(c){
         const ch=state.channels.find(c=>c.id===v.channelId);
         const ratio=((v.views/(ch?ch.avgViews:50000))).toFixed(1);
         const fb=getFlag(v.flag);
-        const sc=v.score>=70?'#3b6d11':v.score>=45?'#854f0b':'#e24b4a';
+        const sc=v.score>=70?'#7ecf5a':v.score>=45?'#f0a040':'#e05555';
         return `<tr>
           <td style="max-width:280px"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px" title="${esc(v.title)}">${esc(v.title)}</div></td>
           <td style="font-size:12px;color:var(--text2);white-space:nowrap">${esc(v.channelName)}</td>
           <td>${fmtNum(v.views)}</td>
           <td style="white-space:nowrap">${videoAge(v.uploadDate)}</td>
-          <td><span style="font-weight:700;color:${parseFloat(ratio)>=3?'#3b6d11':parseFloat(ratio)>=1.5?'#854f0b':'var(--text2)'}">${ratio}×</span></td>
+          <td><span style="font-weight:700;color:${parseFloat(ratio)>=3?'#7ecf5a':parseFloat(ratio)>=1.5?'#f0a040':'var(--text2)'}">${ratio}×</span></td>
           <td><span style="font-weight:700;color:${sc}">${v.score}</span></td>
           <td><span class="badge ${fb.cls}" style="font-size:10px">${fb.icon} ${v.flag}</span></td>
           <td><button class="btn primary" style="font-size:11px;padding:4px 10px;white-space:nowrap" onclick="openVideoModal('${v.id}')">🤖 Analyse</button></td>
@@ -637,7 +637,7 @@ function openVideoModal(videoId){
       </div>
       <div class="divider"></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:16px">
-        ${[['vs avg',ratio+'×'],['Views/day',fmtNum(sb.velocity||0)],['Recency',(sb.recency||0)+'/100'],['Relevance',(sb.relevance||0)+'/100'],['Title hook',(sb.titleStrength||0)+'/100'],['VPN pot.',(sb.vpnPotential||0)+'/100'],['Policy risk',(sb.policyRisk||0)+'/100']].map(([l,val])=>`<div class="metric-card" style="padding:10px 12px"><div class="metric-label" style="color:#888;font-size:11px;margin-bottom:4px">${l}</div><div style="font-size:15px;font-weight:700;color:#4a9e2f">${val}</div></div>`).join('')}
+        ${[['vs avg',ratio+'×'],['Views/day',fmtNum(sb.velocity||0)],['Recency',(sb.recency||0)+'/100'],['Relevance',(sb.relevance||0)+'/100'],['Title hook',(sb.titleStrength||0)+'/100'],['VPN pot.',(sb.vpnPotential||0)+'/100'],['Policy risk',(sb.policyRisk||0)+'/100']].map(([l,val])=>`<div class="metric-card" style="padding:10px 12px"><div class="metric-label" style="color:#888;font-size:11px;margin-bottom:4px">${l}</div><div style="font-size:15px;font-weight:700;color:#7ecf5a">${val}</div></div>`).join('')}
       </div>
       <div class="divider"></div>
       <div style="margin-bottom:16px">
@@ -676,14 +676,14 @@ window.fetchTranscript=async function(videoId, videoUrl){
       // Auto-save it
       state.videos=state.videos.map(v=>v.id===videoId?{...v,transcript:data.transcript}:v);
       saveState();
-      if(status) status.innerHTML='<span style="color:#4a9e2f">✅ Transcript fetched and saved — '+data.transcript.split(' ').length+' words</span>';
+      if(status) status.innerHTML='<span style="color:#7ecf5a">✅ Transcript fetched and saved — '+data.transcript.split(' ').length+' words</span>';
       if(btn){ btn.textContent='✅ Fetched'; }
       notify('Transcript fetched successfully','success');
     } else {
       throw new Error('No transcript available for this video');
     }
   } catch(e){
-    if(status) status.innerHTML='<span style="color:#a32d2d">⚠️ '+esc(e.message)+'</span>';
+    if(status) status.innerHTML='<span style="color:#e05555">⚠️ '+esc(e.message)+'</span>';
     if(btn){ btn.disabled=false; btn.textContent='⬇️ Auto-fetch Transcript'; }
     notify('Transcript fetch failed: '+e.message,'error');
   }
@@ -706,7 +706,7 @@ window.runAiAnalysis=async function(videoId){
       <div style="font-size:36px;margin-bottom:12px">🤖</div>
       <div style="font-size:14px;font-weight:700;margin-bottom:10px">${msg}</div>
       <div style="max-width:240px;margin:0 auto;background:var(--bg2);border-radius:4px;height:6px;overflow:hidden">
-        <div style="height:100%;background:#4a9e2f;border-radius:4px;width:${pct}%;transition:width .5s"></div>
+        <div style="height:100%;background:#7ecf5a;border-radius:4px;width:${pct}%;transition:width .5s"></div>
       </div>
     </div>`;
   };
@@ -825,9 +825,9 @@ window.generateScriptOutline=async function(videoId){
       if(sections.length){
         area.innerHTML=sections.map(s=>`
           <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border)">
-            <div style="font-size:11px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">${esc(s.label)}</div>
+            <div style="font-size:11px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">${esc(s.label)}</div>
             ${s.summary?`<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">${esc(s.summary)}</div>`:''}
-            ${s.bullets.length?`<ul style="list-style:none;padding:0;margin:0">${s.bullets.map(b=>`<li style="font-size:12px;color:var(--text2);padding:2px 0 2px 14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:#4a9e2f">•</span>${esc(b.replace(/^[•\-]\s*/,''))}</li>`).join('')}</ul>`:''}
+            ${s.bullets.length?`<ul style="list-style:none;padding:0;margin:0">${s.bullets.map(b=>`<li style="font-size:12px;color:var(--text2);padding:2px 0 2px 14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:#7ecf5a">•</span>${esc(b.replace(/^[•\-]\s*/,''))}</li>`).join('')}</ul>`:''}
           </div>`).join('');
       } else {
         area.innerHTML=`<div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${esc(scriptText)}</div>`;
@@ -923,11 +923,11 @@ function renderAnalysisResult(a, videoId){
   if(!a) return '';
   const sec=(lbl,val,icon)=>{
     const v=val?val.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():'';
-    return v?`<div class="analysis-section"><div class="analysis-label" style="color:#4a9e2f">${icon} ${lbl}</div><div style="font-size:13px;line-height:1.65;color:var(--text)">${esc(v)}</div></div>`:'';
+    return v?`<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">${icon} ${lbl}</div><div style="font-size:13px;line-height:1.65;color:var(--text)">${esc(v)}</div></div>`:'';
   };
   const lst=(lbl,items,icon)=>{
     const clean=(items||[]).map(i=>i.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').trim()).filter(Boolean);
-    return clean.length?`<div class="analysis-section"><div class="analysis-label" style="color:#4a9e2f">${icon} ${lbl}</div><ul class="analysis-list">${clean.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:'';
+    return clean.length?`<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">${icon} ${lbl}</div><ul class="analysis-list">${clean.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:'';
   };
   const scriptSection=()=>{
     const outline=a.scriptOutline||'';
@@ -942,7 +942,7 @@ function renderAnalysisResult(a, videoId){
       }
       return `<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:6px">${esc(s)}</div>`;
     }).join('');
-    return `<div class="analysis-section"><div class="analysis-label" style="color:#4a9e2f">📋 TDUK script outline</div>${rows}</div>`;
+    return `<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">📋 TDUK script outline</div>${rows}</div>`;
   };
   return `<div style="border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
     <div style="display:grid;grid-template-columns:1fr 1fr">
@@ -957,7 +957,7 @@ function renderAnalysisResult(a, videoId){
       </div>
       <div style="padding:16px">
         <div class="analysis-section" style="border-bottom:none">
-          <div class="analysis-label" style="color:#4a9e2f">📋 TDUK script outline</div>
+          <div class="analysis-label" style="color:#7ecf5a">📋 TDUK script outline</div>
           ${!a.scriptOutline ? `
             <div style="text-align:center;padding:20px 0">
               <div style="font-size:13px;color:var(--text2);margin-bottom:14px">Script outline is generated separately so it gets full detail and never gets cut off.</div>
@@ -973,7 +973,7 @@ function renderAnalysisResult(a, videoId){
                   if(ci>0&&ci<45){
                     const label=s.substring(0,ci).trim();
                     const body=s.substring(ci+1).trim();
-                    return '<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)"><div style="font-size:11px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">'+esc(label)+'</div><div style="font-size:13px;line-height:1.7;color:var(--text)">'+esc(body)+'</div></div>';
+                    return '<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)"><div style="font-size:11px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">'+esc(label)+'</div><div style="font-size:13px;line-height:1.7;color:var(--text)">'+esc(body)+'</div></div>';
                   }
                   return '<div style="font-size:13px;line-height:1.7;color:var(--text);margin-bottom:6px">'+esc(s)+'</div>';
                 }).join('');
