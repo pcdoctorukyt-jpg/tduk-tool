@@ -156,7 +156,20 @@ function fmtNum(n){ n=parseInt(n)||0; if(n>=1000000) return (n/1000000).toFixed(
 function videoAge(d){ const h=Math.floor((Date.now()-new Date(d).getTime())/3600000),dy=Math.floor(h/24); if(dy===0) return h+'h ago'; if(dy<7) return dy+'d ago'; if(dy<30) return Math.floor(dy/7)+'w ago'; return Math.floor(dy/30)+'mo ago'; }
 function getPolicyRisk(s){ if(s>=70) return {label:'High risk',cls:'high-risk'}; if(s>=35) return {label:'Med risk',cls:'med-risk'}; return {label:'Low risk',cls:'low-risk'}; }
 function getFlag(f){ return {'MAKE NOW':{cls:'make-now',icon:'🔥'},WATCH:{cls:'watch',icon:'👀'},'POLICY RISK':{cls:'policy-risk',icon:'⚠️'},IGNORE:{cls:'ignore',icon:'—'}}[f]||{cls:'watch',icon:'👀'}; }
-function notify(msg,type='info'){ const el=document.createElement('div'); el.className='notification'; el.style.borderLeft='3px solid '+({success:'#639922',error:'#a32d2d',info:'#185fa5'}[type]||'#185fa5'); el.textContent=msg; document.getElementById('notification-container').appendChild(el); setTimeout(()=>el.remove(),3500); }
+function notify(msg,type='info'){
+  const el=document.createElement('div');
+  el.className='notification';
+  const colors={success:'#7ecf5a',error:'#e05555',info:'#6ab0f5'};
+  const bgColors={success:'rgba(74,158,47,0.15)',error:'rgba(224,85,85,0.15)',info:'rgba(106,176,245,0.15)'};
+  el.style.cssText=`border-left:3px solid ${colors[type]||colors.info};background:#1e1e1c;color:#e8e6df;box-shadow:0 4px 24px rgba(0,0,0,0.4)`;
+  // Add message and close button
+  el.innerHTML=`<div style="display:flex;align-items:flex-start;gap:10px;justify-content:space-between">
+    <span style="font-size:13px;color:#e8e6df;line-height:1.5">${msg}</span>
+    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:0;line-height:1;flex-shrink:0">✕</button>
+  </div>`;
+  document.getElementById('notification-container').appendChild(el);
+  // No auto-dismiss - user must close it
+}
 function updateRefreshLabel(){ const el=document.getElementById('last-refresh-label'); if(el) el.textContent=state.settings.lastRefresh?'Updated: '+new Date(state.settings.lastRefresh).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'Never refreshed'; }
 function cleanMd(s){ return s?s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():''; }
 
@@ -498,14 +511,22 @@ function openAddChannelModal(existingId){
   openModal(`<div class="modal">
     <div class="modal-head"><h3>${ch?'Edit channel':'Add competitor channel'}</h3><button class="btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="banner info" style="margin-bottom:16px">📡 Paste the YouTube channel URL or @handle. The tool will look up the channel name and stats automatically.</div>
+      <div class="banner info" style="margin-bottom:16px">📡 Best way: paste the channel URL then click Auto-lookup. If that fails, fill in manually — you MUST get the Channel ID from YouTube for video fetching to work.</div>
       <div class="form-row">
         <label class="form-label">YouTube URL or @handle</label>
-        <input class="input" id="ch-url" placeholder="https://youtube.com/@MyMateVince or @MyMateVince" value="${ch?esc(ch.url):''}">
+        <input class="input" id="ch-url" placeholder="https://youtube.com/@UpgradeGuyTech" value="${ch?esc(ch.url):''}">
       </div>
       <div class="form-row">
-        <label class="form-label">Channel name <span style="font-weight:400;color:var(--text3)">(fill in manually if lookup fails)</span></label>
-        <input class="input" id="ch-name" placeholder="e.g. My Mate VINCE" value="${ch?esc(ch.name):''}">
+        <label class="form-label">Channel name</label>
+        <input class="input" id="ch-name" placeholder="e.g. Upgrade Guy Tech" value="${ch?esc(ch.name):''}">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Channel ID <span style="font-weight:400;color:var(--text3)">— required for video fetching</span></label>
+        <input class="input" id="ch-ytid" placeholder="UCxxxxxxxxxxxxxxxxxxxxxxxxx" value="${ch?esc(ch.youtubeChannelId||''):''}">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">
+          To find: go to the YouTube channel → right-click page → View Source → Ctrl+F → search for <strong>"externalId"</strong> → copy the UC... value
+          <br>Or use <a href="https://commentpicker.com/youtube-channel-id.php" target="_blank" style="color:#7ecf5a">commentpicker.com/youtube-channel-id.php</a>
+        </div>
       </div>
       <div class="grid-2">
         <div class="form-row">
@@ -515,7 +536,6 @@ function openAddChannelModal(existingId){
         <div class="form-row">
           <label class="form-label">Avg views per video</label>
           <input class="input" id="ch-avg" type="number" placeholder="50000" value="${ch?ch.avgViews:''}">
-          <div style="font-size:11px;color:var(--text3);margin-top:3px">Check their last 10 videos for a rough average</div>
         </div>
       </div>
     </div>
@@ -538,6 +558,7 @@ window.deleteChannel=function(id){
 window.lookupChannel=async function(){
   const url=document.getElementById('ch-url').value.trim();
   if(!url){ notify('Enter a URL or @handle first','error'); return; }
+  const btn=event.target; btn.disabled=true; btn.textContent='🔍 Looking up...';
   try {
     const resp=await fetch('/.netlify/functions/youtube',{
       method:'POST',
@@ -548,10 +569,14 @@ window.lookupChannel=async function(){
     if(!resp.ok) throw new Error(data.error);
     document.getElementById('ch-name').value=data.name||'';
     document.getElementById('ch-subs').value=data.subscribers||'';
-    // Store the resolved channelId
+    document.getElementById('ch-ytid').value=data.channelId||'';
     document.getElementById('ch-url')._resolvedId=data.channelId;
-    notify('Channel found: '+data.name,'success');
-  } catch(e){ notify('Lookup failed: '+e.message,'error'); }
+    notify('Found: '+data.name+' ('+data.channelId+')','success');
+  } catch(e){
+    notify('Auto-lookup failed: '+e.message+'. Please paste the Channel ID manually.','error');
+  } finally {
+    btn.disabled=false; btn.textContent='🔍 Auto-lookup';
+  }
 };
 
 window.saveChannel=function(existingId){
@@ -560,14 +585,17 @@ window.saveChannel=function(existingId){
   const subscribers=parseInt(document.getElementById('ch-subs').value)||0;
   const avgViews=parseInt(document.getElementById('ch-avg').value)||50000;
   const urlEl=document.getElementById('ch-url');
-  const youtubeChannelId=urlEl._resolvedId||'';
-  if(!name||!url){ notify('Name and URL are required','error'); return; }
+  // Get channel ID: manual input takes priority, then auto-resolved
+  const manualId=document.getElementById('ch-ytid')?.value.trim()||'';
+  const youtubeChannelId=manualId||urlEl._resolvedId||'';
+  if(!name){ notify('Channel name is required','error'); return; }
+  if(!youtubeChannelId){ notify('Channel ID is required for video fetching. Use the Auto-lookup button or paste the UC... ID manually.','error'); return; }
   if(existingId){
-    state.channels=state.channels.map(c=>c.id===existingId?{...c,name,url,subscribers,avgViews,youtubeChannelId:youtubeChannelId||c.youtubeChannelId}:c);
+    state.channels=state.channels.map(c=>c.id===existingId?{...c,name,url,subscribers,avgViews,youtubeChannelId}:c);
     notify('Channel updated','success');
   } else {
-    state.channels.push({id:'ch'+Date.now(),name,url,subscribers,avgViews,youtubeChannelId,status:'active'});
-    notify('Channel added — click "Fetch Latest Videos" to load their videos','success');
+    state.channels.push({id:'ch'+Date.now(),name,url:url||'https://youtube.com',subscribers,avgViews,youtubeChannelId,status:'active'});
+    notify('Channel added! Now click Fetch Latest Videos.','success');
   }
   saveState(); closeModal(); showPage('channels');
 };
