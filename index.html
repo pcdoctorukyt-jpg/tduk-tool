@@ -755,7 +755,7 @@ window.generateScriptOutline=async function(videoId){
         model:'claude-haiku-4-5-20251001',
         max_tokens:1200,
         system:'You are a YouTube scriptwriter for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Write complete, detailed script outlines. Every section needs 2-3 sentences. Never leave a section empty or incomplete.',
-        messages:[{role:'user',content:`Write a complete 6-8 minute TDUK script outline for a video based on:\n${ctx}\n\nWrite 2-3 full sentences for EVERY section below. Do not skip any section:\n\nIntro (0:00-0:45):\nSection 1 (0:45-2:30):\nSection 2 (2:30-4:00):\nSection 3 (4:00-5:30):\nVPN Segment (5:30-6:30):\nOutro (6:30-7:30):`}]
+        messages:[{role:'user',content:`Write a concise 6-8 minute TDUK script outline for a video based on:\n${ctx}\n\nFor each section give:\n- One sentence summarising what to say\n- 3 bullet points of specific talking points\n\nUse EXACTLY this format, no extra text:\n\nIntro (0:00-0:45):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 1 (0:45-2:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 2 (2:30-4:00):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 3 (4:00-5:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nVPN Segment (5:30-6:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nOutro (6:30-7:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]`}]
       })
     });
     const d=await r.json();
@@ -772,20 +772,25 @@ window.generateScriptOutline=async function(videoId){
       if(si===-1) continue;
       const cs=si+label.length+1;
       const ei=next?scriptText.indexOf(next+':'):scriptText.length;
-      const body=scriptText.substring(cs,ei!==-1?ei:scriptText.length).trim();
-      sections.push({label,body});
+      const raw=scriptText.substring(cs,ei!==-1?ei:scriptText.length).trim();
+      // Split into summary and bullet points
+      const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+      const summary=lines.find(l=>l.startsWith('Summary:'))||'';
+      const bullets=lines.filter(l=>l.startsWith('•')||l.startsWith('-'));
+      sections.push({label,summary:summary.replace('Summary:','').trim(),bullets});
     }
 
-    const updatedAnalysis={...v.analysis,scriptOutline:sections.map(s=>s.label+': '+s.body).join('\n')};
+    const updatedAnalysis={...v.analysis,scriptOutline:sections.map(s=>s.label+': '+s.summary+' '+s.bullets.join(' ')).join('\n')};
     state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:updatedAnalysis}:v2);
     saveState();
 
     if(area){
       if(sections.length){
         area.innerHTML=sections.map(s=>`
-          <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)">
+          <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border)">
             <div style="font-size:11px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">${esc(s.label)}</div>
-            <div style="font-size:13px;line-height:1.7;color:var(--text)">${esc(s.body)}</div>
+            ${s.summary?`<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">${esc(s.summary)}</div>`:''}
+            ${s.bullets.length?`<ul style="list-style:none;padding:0;margin:0">${s.bullets.map(b=>`<li style="font-size:12px;color:var(--text2);padding:2px 0 2px 14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:#4a9e2f">•</span>${esc(b.replace(/^[•\-]\s*/,''))}</li>`).join('')}</ul>`:''}
           </div>`).join('');
       } else {
         area.innerHTML=`<div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${esc(scriptText)}</div>`;
