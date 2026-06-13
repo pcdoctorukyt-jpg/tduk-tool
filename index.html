@@ -714,6 +714,22 @@ function renderSettings(c){
           </div>`).join('')}
           <button class="btn primary" onclick="saveSettings()">💾 Save Scoring Settings</button>
         </div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-weight:700;margin-bottom:12px;font-size:15px">💾 Backup & Restore</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">Export your channels and videos to a JSON file. Import it back any time to restore your data after updating the tool.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <button class="btn success" onclick="exportData()">⬇️ Export All Data</button>
+            <button class="btn amber" onclick="document.getElementById('import-file').click()">⬆️ Import Data</button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+          </div>
+          <div id="backup-status" style="font-size:12px;color:var(--text3)">
+            ${state.channels.length} channels · ${state.videos.length} videos currently stored
+          </div>
+          <div class="divider"></div>
+          <div style="font-weight:600;margin-bottom:8px;color:var(--text)">Export channels only</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Just the channel list — useful if you want to set up on a new device without the video history.</div>
+          <button class="btn" onclick="exportChannelsOnly()">⬇️ Export Channels Only</button>
+        </div>
         <div class="card">
           <div style="font-weight:700;margin-bottom:10px;font-size:15px">Policy Risk Guide</div>
           <div style="font-size:13px;line-height:2.1">
@@ -1001,15 +1017,12 @@ window.runAiAnalysis=async function(videoId){
   try {
     showStatus('Analysing strategy...', 25);
     const t1=await callAI('You are a YouTube strategy expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Be concise and actionable. No markdown asterisks.',
-      `Analyse this competitor video for TDUK:\n${ctx}\n\nRespond with exactly these headers:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:\nESTIMATED FIT SCORE FOR TDUK:\nCOMMENT QUESTION TO ASK:`,600);
+      `Analyse this competitor video for TDUK:\n${ctx}\n\nRespond with exactly these headers:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:\nESTIMATED FIT SCORE FOR TDUK: [give a number score out of 10, e.g. "8/10" followed by one short reason]\nCOMMENT QUESTION TO ASK:`,600);
     showStatus('Generating titles & thumbnails...', 55);
     const t2=await callAI('YouTube title expert for TDUK (Firestick/VPN channel). Output only the lists. No extra text.',
       `Based on:\n${ctx}\n\n5 TDUK TITLE IDEAS:\n1.\n2.\n3.\n4.\n5.\n\n5 THUMBNAIL TEXT IDEAS:\n1.\n2.\n3.\n4.\n5.`,280);
-    showStatus('Writing script outline...', 80);
-    const t3=await callAI('YouTube scriptwriter for TDUK (Tech Doctor UK), Firestick/streaming/VPN channel. Write complete, detailed outlines. Every section must have 2-3 sentences of specific detail.',
-      `Write a complete 6-8 min TDUK script outline based on:\n${ctx}\n\nUse this exact format with a summary sentence and 3 bullet points per section:\n\nIntro (0:00-0:45):\nSummary: [opening hook sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 1 (0:45-2:30):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 2 (2:30-4:00):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 3 (4:00-5:30):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nVPN Segment (5:30-6:30):\nSummary: [how to introduce VPN naturally]\n• [talking point]\n• [talking point]\n• [talking point]\n\nOutro (6:30-7:30):\nSummary: [how to close]\n• [talking point]\n• [talking point]\n• [talking point]`,900);
     showStatus('Done!', 100);
-    const parsed={...parseStrategyText(t1),...parseTitlesText(t2),...parseScriptText(t3),raw:t1+'\n'+t2+'\n'+t3};
+    const parsed={...parseStrategyText(t1),...parseTitlesText(t2),scriptSections:[],raw:t1+'\n'+t2};
     state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:parsed}:v2);
     saveState();
     if(aa) aa.innerHTML=renderAnalysisResult(parsed,videoId);
@@ -1088,7 +1101,7 @@ function renderAnalysisResult(a,videoId){
         ${sec("Why it's working",a.whyWorking,'📊')}${sec('Main hook',a.mainHook,'🎣')}${sec('Emotional trigger',a.emotionalTrigger,'💡')}${lst('Retention hooks',a.retentionHooks,'🔄')}${sec('Comment question',a.commentQuestion,'💬')}
       </div>
       <div style="padding:14px;border-bottom:0.5px solid var(--border)">
-        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}${a.fitScore?`<div class="a-sec"><div class="al">⚡ Estimated TDUK fit score</div><div style="font-size:22px;font-weight:700;color:var(--green)">${esc(a.fitScore)}</div></div>`:''}
+        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}${a.fitScore?`<div class="a-sec"><div class="al">⚡ Estimated TDUK fit score</div><div style="font-size:15px;font-weight:700;color:var(--green)">${esc(a.fitScore)}</div></div>`:''}
       </div>
       <div style="padding:14px;border-right:0.5px solid var(--border)">
         ${lst('5 TDUK title ideas',a.titleIdeas,'📝')}${lst('5 thumbnail text ideas',a.thumbnailTexts,'🎨')}
@@ -1128,6 +1141,111 @@ window.generateScriptOutline=async function(videoId){
 window.clearAnalysis=function(videoId){
   state.videos=state.videos.map(v=>v.id===videoId?{...v,analysis:null}:v);
   saveState(); openVideoModal(videoId);
+};
+
+window.exportData = function(){
+  const data = {
+    exportDate: new Date().toISOString(),
+    version: '3.0',
+    channels: state.channels,
+    videos: state.videos,
+    settings: {
+      // Don't export API keys for security
+      videosPerChannel: state.settings.videosPerChannel,
+      spikeThreshold: state.settings.spikeThreshold,
+      opportunityThreshold: state.settings.opportunityThreshold,
+      freshnessWeight: state.settings.freshnessWeight,
+      trendWeight: state.settings.trendWeight,
+      tdukFormulaWeight: state.settings.tdukFormulaWeight,
+      policyRiskWeight: state.settings.policyRiskWeight,
+    }
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tduk-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  notify('✅ Exported ' + state.channels.length + ' channels and ' + state.videos.length + ' videos', 'success');
+};
+
+window.exportChannelsOnly = function(){
+  const data = {
+    exportDate: new Date().toISOString(),
+    version: '3.0',
+    channelsOnly: true,
+    channels: state.channels
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tduk-channels-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  notify('✅ Exported ' + state.channels.length + ' channels', 'success');
+};
+
+window.importData = function(event){
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.channels && !data.videos) {
+        notify('Invalid backup file — no channels or videos found', 'error');
+        return;
+      }
+      let channelsAdded = 0, channelsSkipped = 0;
+      let videosAdded = 0, videosSkipped = 0;
+
+      // Import channels — merge, don't overwrite existing
+      if (data.channels?.length) {
+        data.channels.forEach(ch => {
+          const exists = state.channels.find(c => c.id === ch.id || c.youtubeChannelId === ch.youtubeChannelId);
+          if (!exists) {
+            state.channels.push(ch);
+            channelsAdded++;
+          } else {
+            channelsSkipped++;
+          }
+        });
+      }
+
+      // Import videos if present
+      if (data.videos?.length) {
+        data.videos.forEach(v => {
+          const exists = state.videos.find(x => x.id === v.id || (v.youtubeId && x.youtubeId === v.youtubeId));
+          if (!exists) {
+            state.videos.push(v);
+            videosAdded++;
+          } else {
+            videosSkipped++;
+          }
+        });
+      }
+
+      // Import settings if present (but not API keys)
+      if (data.settings) {
+        const safe = ['videosPerChannel','spikeThreshold','opportunityThreshold','freshnessWeight','trendWeight','tdukFormulaWeight','policyRiskWeight'];
+        safe.forEach(k => { if (data.settings[k] !== undefined) state.settings[k] = data.settings[k]; });
+      }
+
+      saveState();
+      const msg = data.channelsOnly
+        ? `✅ Imported ${channelsAdded} channels (${channelsSkipped} already existed)`
+        : `✅ Imported ${channelsAdded} channels + ${videosAdded} videos (${channelsSkipped + videosSkipped} already existed)`;
+      notify(msg, 'success');
+      showPage('settings');
+    } catch(err) {
+      notify('Import failed: ' + err.message, 'error');
+    }
+    // Reset file input so same file can be re-imported
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 };
 
 showPage('dashboard');
