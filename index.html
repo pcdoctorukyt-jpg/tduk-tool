@@ -14,7 +14,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#141412;color:#e8
 .sidebar-logo{padding:18px 16px 12px;border-bottom:0.5px solid var(--border)}
 .sidebar-logo .brand{font-size:17px;font-weight:700;color:var(--text)}
 .sidebar-logo .sub{font-size:11px;color:var(--text3);margin-top:2px}
-.nav-section{padding:14px 14px 4px;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px}
+.nav-section{padding:14px 14px 4px;font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);margin:1px 6px;cursor:pointer;color:var(--text2);font-size:13px;transition:background .15s;border:none;background:none;width:calc(100% - 12px);text-align:left}
 .nav-item:hover{background:var(--bg2)}
 .nav-item.active{background:var(--green-bg);color:var(--green)}
@@ -35,7 +35,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#141412;color:#e8
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .metric-card{background:var(--bg2);border-radius:var(--radius);padding:12px 14px;border:0.5px solid var(--border)}
-.metric-label{font-size:11px;color:var(--text3);margin-bottom:3px}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:3px}
 .metric-value{font-size:20px;font-weight:700;color:var(--green)}
 .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .badge.make-now{background:var(--green-bg);color:var(--green)}
@@ -45,7 +45,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#141412;color:#e8
 .badge.low-risk{background:var(--green-bg);color:var(--green)}
 .badge.med-risk{background:var(--amber-bg);color:var(--amber)}
 .badge.high-risk{background:var(--red-bg);color:var(--red)}
-.score-bar{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden}
+.score-bar{height:5px;border-radius:3px;background:#333;overflow:hidden}
 .score-fill{height:100%;border-radius:3px}
 .score-high{background:var(--green)}.score-med{background:var(--amber)}.score-low{background:var(--red)}
 .video-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .15s,transform .15s}
@@ -57,19 +57,19 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#141412;color:#e8
 .spike-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.85);color:var(--amber);font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
 .video-info{padding:10px 12px}
 .video-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
-.video-meta{font-size:11px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.video-meta{font-size:11px;color:var(--text2);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}
 .input{padding:7px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;width:100%}
 .input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px var(--green-bg)}
 select.input{cursor:pointer}
 .textarea{padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;width:100%;resize:vertical;min-height:80px}
 .textarea:focus{outline:none;border-color:var(--green)}
 .form-row{margin-bottom:12px}
-.form-label{font-size:12px;color:var(--text2);margin-bottom:4px;display:block;font-weight:600}
+.form-label{font-size:12px;color:#c8c6bf;margin-bottom:4px;display:block;font-weight:600}
 .section-title{font-size:15px;font-weight:700;margin-bottom:3px;color:var(--text)}
-.section-sub{font-size:13px;color:var(--text2);margin-bottom:14px}
+.section-sub{font-size:13px;color:#a8a69f;margin-bottom:14px}
 .table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:0.5px solid var(--border)}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:9px 13px;font-size:11px;color:var(--text3);font-weight:700;background:var(--bg2);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.4px}
+th{text-align:left;padding:9px 13px;font-size:11px;color:var(--text2);font-weight:700;background:var(--bg2);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.4px}
 td{padding:9px 13px;font-size:13px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg2)}
@@ -105,17 +105,17 @@ tr:hover td{background:var(--bg2)}
 .ch-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px}
 .ch-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg2);object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;border:0.5px solid var(--border)}
 .ch-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:2px}
-.ch-meta{font-size:12px;color:var(--text3)}
+.ch-meta{font-size:12px;color:var(--text2)}
 .progress-bar{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin:8px 0}
 .progress-fill{height:100%;background:var(--green);border-radius:2px;animation:prog 1.5s ease-in-out infinite}
 @keyframes prog{0%{width:10%;margin-left:0}50%{width:50%;margin-left:25%}100%{width:10%;margin-left:90%}}
 .cluster-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;cursor:pointer;transition:border-color .15s}
 .cluster-card:hover{border-color:var(--green)}
-.cluster-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px}
-.cluster-stat{font-size:12px;color:var(--text3);margin-bottom:2px}
+.cluster-name{font-weight:700;font-size:14px;color:#fff;margin-bottom:6px}
+.cluster-stat{font-size:12px;color:var(--text2);margin-bottom:2px}
 .trend-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
 .trend-row:last-child{border-bottom:none}
-.trend-rank{font-size:18px;font-weight:700;color:var(--text3);min-width:28px}
+.trend-rank{font-size:18px;font-weight:700;color:var(--green);min-width:28px}
 .tab-bar{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
 .tab{padding:6px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2)}
 .tab.active{background:var(--green-bg);color:var(--green);border-color:rgba(126,207,90,0.3)}
@@ -376,7 +376,7 @@ function videoCard(v){
     </div>
     <div class="video-info">
       <div class="video-title">${esc(v.title)}</div>
-      <div class="video-meta">
+      <div class="video-meta" style="color:#a8a69f">
         <span>📡 ${esc(v.channelName)}</span>
         <span>👁 ${fmtNum(v.views)}</span>
         <span>🕐 ${videoAge(v.uploadDate)}</span>
@@ -481,7 +481,7 @@ function renderDailyReport(c){
             <span style="font-size:11px;color:var(--text3);align-self:center">Score: <strong style="color:var(--green)">${v.score}</strong>/100 · Spike: <strong style="color:var(--amber)">${spike}×</strong></span>
           </div>
           <div style="font-weight:700;margin-bottom:3px;color:var(--text);font-size:14px">${esc(v.title)}</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · avg ${fmtNum(v.scoreBreakdown?.avg20||0)}</div>
+          <div style="font-size:12px;color:#a8a69f;margin-bottom:8px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · avg ${fmtNum(v.scoreBreakdown?.avg20||0)}</div>
           <div style="background:var(--green-bg);border:0.5px solid rgba(126,207,90,0.3);border-radius:var(--radius);padding:7px 11px;margin-bottom:6px;font-size:12px;color:var(--green)"><strong>Why outperforming:</strong> ${esc(reasons.join(' · '))}</div>
           <div style="background:var(--blue-bg);border:0.5px solid rgba(106,176,245,0.3);border-radius:var(--radius);padding:7px 11px;margin-bottom:6px;font-size:12px;color:var(--blue)"><strong>TDUK angle:</strong> ${esc(angle)}</div>
           <div style="background:var(--bg2);border-radius:var(--radius);padding:7px 11px;margin-bottom:8px;font-size:12px;color:var(--text2)"><strong style="color:var(--text)">Thumbnail text:</strong> ${esc(thumbSuggestion)}</div>
@@ -529,11 +529,11 @@ function renderClusters(c){
           <div class="cluster-stat">👁 Avg ${fmtNum(cl.avgViews)} views</div>
           <div class="cluster-stat">📈 Avg spike: <span style="color:${cl.avgSpike>=3?'var(--green)':cl.avgSpike>=1.5?'var(--amber)':'var(--text3)'}">${cl.avgSpike}×</span></div>
           <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
-            <span style="font-size:11px;color:var(--text3)">Avg opp. score</span>
+            <span style="font-size:11px;color:var(--text2)">Avg opp. score</span>
             <span style="font-size:16px;font-weight:700;color:${cl.avgScore>=70?'var(--green)':cl.avgScore>=45?'var(--amber)':'var(--text3)'}">${cl.avgScore}</span>
           </div>
           <div class="score-bar" style="margin-top:4px"><div class="score-fill ${cl.avgScore>=70?'score-high':cl.avgScore>=45?'score-med':'score-low'}" style="width:${cl.avgScore}%"></div></div>
-          ${cl.best?`<div style="margin-top:8px;font-size:11px;color:var(--text3)">Best: <span style="color:var(--text2)">${esc(cl.best.title.substring(0,50))}${cl.best.title.length>50?'...':''}</span></div>`:''}
+          ${cl.best?`<div style="margin-top:8px;font-size:11px;color:var(--text2)">Best: <span style="color:var(--text2)">${esc(cl.best.title.substring(0,50))}${cl.best.title.length>50?'...':''}</span></div>`:''}
         </div>`).join('')}
     </div>`;
 }
@@ -583,8 +583,8 @@ function renderTrends(c){
           <div class="trend-rank">${i+1}</div>
           ${v.thumbnail?`<img src="${esc(v.thumbnail)}" style="width:60px;height:34px;object-fit:cover;border-radius:4px;flex-shrink:0">`:`<div style="width:60px;height:34px;background:var(--bg2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>`}
           <div style="flex:1;min-width:0">
-            <div style="font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px">${esc(v.title)}</div>
-            <div style="font-size:11px;color:var(--text3)">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)}</div>
+            <div style="font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px">${esc(v.title)}</div>
+            <div style="font-size:11px;color:var(--text2)">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div style="font-weight:700;color:var(--green);font-size:14px">${stat}</div>
@@ -645,7 +645,7 @@ function renderVideos(c){
         const cl=CLUSTERS.find(c=>c.id===getCluster(v.title));
         return `<tr>
           <td style="max-width:260px"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px" title="${esc(v.title)}">${esc(v.title)}</div></td>
-          <td style="font-size:12px;color:var(--text2);white-space:nowrap">${esc(v.channelName)}</td>
+          <td style="font-size:12px;color:#c8c6bf;white-space:nowrap">${esc(v.channelName)}</td>
           <td>${fmtNum(v.views)}</td>
           <td style="white-space:nowrap">${videoAge(v.uploadDate)}</td>
           <td><span style="font-weight:700;color:${(sb.spikeScore||0)>=5?'var(--green)':(sb.spikeScore||0)>=2?'var(--amber)':'var(--text3)'}">${sb.spikeScore||0}×</span></td>
@@ -689,11 +689,11 @@ function renderSettings(c){
             </select>
           </div>
           <div class="settings-row">
-            <div><div style="font-weight:600;color:var(--text)">Last refresh</div><div style="font-size:12px;color:var(--text3)">${s.lastRefresh?new Date(s.lastRefresh).toLocaleString():'Never'}</div></div>
+            <div><div style="font-weight:600;color:var(--text)">Last refresh</div><div style="font-size:12px;color:var(--text2)">${s.lastRefresh?new Date(s.lastRefresh).toLocaleString():'Never'}</div></div>
             <button class="btn" onclick="rescoreAll()">Re-score now</button>
           </div>
           <div class="settings-row">
-            <div><div style="font-weight:600;color:var(--text)">Total data</div><div style="font-size:12px;color:var(--text3)">${state.videos.length} videos · ${state.channels.length} channels</div></div>
+            <div><div style="font-weight:600;color:var(--text)">Total data</div><div style="font-size:12px;color:var(--text2)">${state.videos.length} videos · ${state.channels.length} channels</div></div>
             <button class="btn danger" onclick="if(confirm('Clear all videos?')){state.videos=[];saveState();showPage('settings');notify('Videos cleared','success')}">Clear videos</button>
           </div>
         </div>
@@ -1047,7 +1047,13 @@ function extractSection(text,label){
 function parseStrategyText(text){
   const get=l=>extractSection(text,l).join(' ');
   const gl=l=>extractSection(text,l);
-  return {whyWorking:get("WHY IT'S WORKING"),mainHook:get('MAIN HOOK'),emotionalTrigger:get('EMOTIONAL TRIGGER'),retentionHooks:gl('RETENTION HOOKS'),thumbnailStrategy:get('THUMBNAIL STRATEGY'),titleStrategy:get('TITLE STRATEGY'),riskLevel:get('RISK LEVEL FOR TDUK'),tdukAngle:get('BEST TDUK ANGLE'),vpnCta:get('VPN CTA ANGLE'),fitScore:get('ESTIMATED FIT SCORE FOR TDUK'),commentQuestion:get('COMMENT QUESTION TO ASK')};
+  // Special inline extractor for single-line values like "8/10 — reason"
+  const getInline = label => {
+    const re = new RegExp(label + ':?\\s*([^\\n]+)', 'i');
+    const m = text.match(re);
+    return m ? m[1].trim() : '';
+  };
+  return {whyWorking:get("WHY IT'S WORKING"),mainHook:get('MAIN HOOK'),emotionalTrigger:get('EMOTIONAL TRIGGER'),retentionHooks:gl('RETENTION HOOKS'),thumbnailStrategy:get('THUMBNAIL STRATEGY'),titleStrategy:get('TITLE STRATEGY'),riskLevel:get('RISK LEVEL FOR TDUK'),tdukAngle:get('BEST TDUK ANGLE'),vpnCta:get('VPN CTA ANGLE'),fitScore:getInline('ESTIMATED FIT SCORE FOR TDUK'),commentQuestion:getInline('COMMENT QUESTION TO ASK')};
 }
 function parseTitlesText(text){
   const titleLines=[],thumbLines=[];
@@ -1101,7 +1107,7 @@ function renderAnalysisResult(a,videoId){
         ${sec("Why it's working",a.whyWorking,'📊')}${sec('Main hook',a.mainHook,'🎣')}${sec('Emotional trigger',a.emotionalTrigger,'💡')}${lst('Retention hooks',a.retentionHooks,'🔄')}${sec('Comment question',a.commentQuestion,'💬')}
       </div>
       <div style="padding:14px;border-bottom:0.5px solid var(--border)">
-        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}${a.fitScore?`<div class="a-sec"><div class="al">⚡ Estimated TDUK fit score</div><div style="font-size:15px;font-weight:700;color:var(--green)">${esc(a.fitScore)}</div></div>`:''}
+        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}${a.fitScore?`<div class="a-sec"><div class="al">⚡ Estimated TDUK fit score</div><div style="font-size:14px;font-weight:700;color:var(--green);line-height:1.5">${esc(a.fitScore)}</div></div>`:''}
       </div>
       <div style="padding:14px;border-right:0.5px solid var(--border)">
         ${lst('5 TDUK title ideas',a.titleIdeas,'📝')}${lst('5 thumbnail text ideas',a.thumbnailTexts,'🎨')}
@@ -1123,7 +1129,47 @@ window.generateScriptOutline=async function(videoId){
   const avg=v.scoreBreakdown?.avg20||(ch?.avgViews||50000);
   const ctx=`Video: "${v.title}" by ${v.channelName}. Spike: ${v.scoreBreakdown?.spikeScore||0}× avg of ${fmtNum(avg)}.${v.transcript?' Transcript: '+v.transcript.substring(0,600):''}`;
   try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':state.settings.claudeApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:900,system:'YouTube scriptwriter for TDUK (Firestick/streaming/VPN channel). Write complete detailed outlines. Never leave sections empty.',messages:[{role:'user',content:`Complete 6-8 min TDUK script outline for:\n${ctx}\n\nFor every section: one summary sentence + 3 bullet points:\n\nIntro (0:00-0:45):\nSummary:\n• \n• \n• \n\nSection 1 (0:45-2:30):\nSummary:\n• \n• \n• \n\nSection 2 (2:30-4:00):\nSummary:\n• \n• \n• \n\nSection 3 (4:00-5:30):\nSummary:\n• \n• \n• \n\nVPN Segment (5:30-6:30):\nSummary:\n• \n• \n• \n\nOutro (6:30-7:30):\nSummary:\n• \n• \n• `}]})});
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':state.settings.claudeApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:900,system:'YouTube scriptwriter for TDUK (Firestick/streaming/VPN channel). Write complete detailed outlines. Never leave sections empty.',messages:[{role:'user',content:`Create a concise TDUK script outline. STRICT FORMAT RULES: Each section gets EXACTLY one Summary line and EXACTLY 3 bullet points. No extra text. No paragraphs. No walls of text. Maximum 15 words per bullet point.
+
+Video context: ${ctx}
+
+REQUIRED OUTPUT FORMAT (copy this structure exactly):
+
+Intro (0:00-0:45):
+Summary: [one sentence hook]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]
+
+Section 1 (0:45-2:30):
+Summary: [one sentence]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]
+
+Section 2 (2:30-4:00):
+Summary: [one sentence]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]
+
+Section 3 (4:00-5:30):
+Summary: [one sentence]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]
+
+VPN Segment (5:30-6:30):
+Summary: [one sentence on how to introduce VPN]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]
+
+Outro (6:30-7:30):
+Summary: [one sentence]
+• [max 15 words]
+• [max 15 words]
+• [max 15 words]`}]})});
     const d=await r.json(); if(!r.ok) throw new Error(d.error?.message);
     const {scriptSections}=parseScriptText(d.content?.[0]?.text||'');
     const updatedAnalysis={...v.analysis,scriptSections};
