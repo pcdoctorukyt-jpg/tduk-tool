@@ -32,19 +32,46 @@ exports.handler = async (event) => {
     // Resolve channel ID from handle or URL
     if (action === 'resolveChannel') {
       const input = channelId.trim();
-      let id = input;
+      let id = null;
 
-      // If it's a handle (@name) or URL, search for it
-      if (input.startsWith('@') || input.includes('youtube.com')) {
-        const handle = input.replace('https://youtube.com/', '').replace('https://www.youtube.com/', '');
-        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(handle)}&maxResults=1&key=${apiKey}`;
+      // Extract handle from URL if needed
+      let handle = input;
+      if (input.includes('youtube.com/')) {
+        const match = input.match(/youtube\.com\/(@[^/?]+|channel\/([UC][^/?]+))/);
+        if (match) {
+          handle = match[2] || match[1]; // UC... id or @handle
+        }
+      }
+
+      // If it looks like a UC channel ID already, use it directly
+      if (handle.startsWith('UC') && handle.length > 20) {
+        id = handle;
+      } else {
+        // Use forHandle API (exact match, no search guessing)
+        const cleanHandle = handle.startsWith('@') ? handle.substring(1) : handle;
+        const handleUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=${encodeURIComponent(cleanHandle)}&key=${apiKey}`;
+        const handleData = await get(handleUrl);
+
+        if (handleData.items?.length) {
+          id = handleData.items[0].id;
+          const ch = handleData.items[0];
+          return { statusCode: 200, headers: cors, body: JSON.stringify({
+            channelId: id,
+            name: ch.snippet.title,
+            thumbnail: ch.snippet.thumbnails?.default?.url,
+            subscribers: parseInt(ch.statistics.subscriberCount) || 0,
+          })};
+        }
+
+        // Fallback: search (less accurate but better than nothing)
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent('@'+cleanHandle)}&maxResults=1&key=${apiKey}`;
         const searchData = await get(searchUrl);
         if (searchData.error) return { statusCode: 400, headers: cors, body: JSON.stringify({ error: searchData.error.message }) };
-        if (!searchData.items?.length) return { statusCode: 404, headers: cors, body: JSON.stringify({ error: 'Channel not found' }) };
+        if (!searchData.items?.length) return { statusCode: 404, headers: cors, body: JSON.stringify({ error: 'Channel not found. Try pasting the UC... Channel ID manually.' }) };
         id = searchData.items[0].snippet.channelId;
       }
 
-      // Get channel stats
+      // Get channel stats by ID
       const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${id}&key=${apiKey}`;
       const channelData = await get(channelUrl);
       if (!channelData.items?.length) return { statusCode: 404, headers: cors, body: JSON.stringify({ error: 'Channel not found' }) };
