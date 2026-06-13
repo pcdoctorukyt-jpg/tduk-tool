@@ -6,105 +6,119 @@
 <title>TDUK Viral Topic Finder</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:var(--text);font-size:14px;line-height:1.5}
-:root{--bg:#fff;--bg2:#f5f5f3;--text:#1a1a18;--text2:#5f5e5a;--text3:#888780;--border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);--radius:8px;--radius-lg:12px;}
-@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#242422;--text:#e8e6df;--text2:#a8a69f;--text3:#666461;--border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);}body{background:#141412}}
+body{font-family:system-ui,-apple-system,sans-serif;background:#141412;color:#e8e6df;font-size:14px;line-height:1.5}
+:root{--bg:#1c1c1a;--bg2:#242422;--bg3:#2a2a28;--text:#e8e6df;--text2:#a8a69f;--text3:#666461;--border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);--green:#7ecf5a;--green-bg:rgba(126,207,90,0.15);--amber:#f0a040;--amber-bg:rgba(240,160,64,0.15);--red:#e05555;--red-bg:rgba(224,85,85,0.15);--blue:#6ab0f5;--blue-bg:rgba(106,176,245,0.15);--radius:8px;--radius-lg:12px}
 .layout{display:flex;height:100vh;overflow:hidden}
 .sidebar{width:220px;min-width:220px;background:var(--bg);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
 .main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.sidebar-logo{padding:20px 16px 14px;border-bottom:0.5px solid var(--border)}
+.sidebar-logo{padding:18px 16px 12px;border-bottom:0.5px solid var(--border)}
 .sidebar-logo .brand{font-size:17px;font-weight:700;color:var(--text)}
-.sidebar-logo .sub{font-size:11px;color:var(--text3);margin-top:3px}
+.sidebar-logo .sub{font-size:11px;color:var(--text3);margin-top:2px}
 .nav-section{padding:14px 14px 4px;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);margin:1px 6px;cursor:pointer;color:var(--text2);font-size:13px;transition:background .15s;border:none;background:none;width:calc(100% - 12px);text-align:left}
 .nav-item:hover{background:var(--bg2)}
-.nav-item.active{background:rgba(24,95,165,0.15);color:#6ab0f5}
-.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
-.topbar-title{font-size:16px;font-weight:700;color:var(--text)}
-.content{padding:20px 24px;flex:1}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;transition:background .15s;font-family:inherit;white-space:nowrap;text-decoration:none}
-.btn:hover{background:var(--bg2)}
-.btn.primary{background:rgba(24,95,165,0.15);color:#6ab0f5;border-color:transparent}
-.btn.primary:hover{background:rgba(74,158,47,0.3)}
-.btn.success{background:rgba(74,158,47,0.2);color:#7ecf5a;border-color:rgba(74,158,47,0.3)}
-.btn.danger{background:#fcebeb;color:#a32d2d;border-color:transparent}
+.nav-item.active{background:var(--green-bg);color:var(--green)}
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10}
+.topbar-title{font-size:15px;font-weight:700;color:var(--text)}
+.content{padding:18px 20px;flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);font-size:13px;cursor:pointer;transition:background .15s;font-family:inherit;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--bg3)}
+.btn.primary{background:var(--green-bg);color:var(--green);border-color:rgba(126,207,90,0.3)}
+.btn.primary:hover{background:rgba(126,207,90,0.25)}
+.btn.success{background:var(--green-bg);color:var(--green);border-color:rgba(126,207,90,0.3)}
+.btn.danger{background:var(--red-bg);color:var(--red);border-color:rgba(224,85,85,0.3)}
+.btn.amber{background:var(--amber-bg);color:var(--amber);border-color:rgba(240,160,64,0.3)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
-.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.metric-card{background:var(--bg2);border-radius:var(--radius);padding:14px 16px}
-.metric-label{font-size:12px;color:var(--text3);margin-bottom:4px}
-.metric-value{font-size:24px;font-weight:700;color:var(--text)}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
-.badge.make-now{background:rgba(74,158,47,0.15);color:#7ecf5a}
-.badge.watch{background:rgba(240,160,64,0.2);color:#f0a040}
-.badge.ignore{background:var(--bg2);color:var(--text2)}
-.badge.policy-risk{background:rgba(224,85,85,0.2);color:#e05555}
-.badge.low-risk{background:rgba(74,158,47,0.15);color:#7ecf5a}
-.badge.med-risk{background:rgba(240,160,64,0.2);color:#f0a040}
-.badge.high-risk{background:rgba(224,85,85,0.2);color:#e05555}
-.score-bar{height:6px;border-radius:3px;background:var(--bg2);overflow:hidden}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.metric-card{background:var(--bg2);border-radius:var(--radius);padding:12px 14px;border:0.5px solid var(--border)}
+.metric-label{font-size:11px;color:var(--text3);margin-bottom:3px}
+.metric-value{font-size:20px;font-weight:700;color:var(--green)}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge.make-now{background:var(--green-bg);color:var(--green)}
+.badge.watch{background:var(--amber-bg);color:var(--amber)}
+.badge.ignore{background:var(--bg2);color:var(--text3)}
+.badge.policy-risk{background:var(--red-bg);color:var(--red)}
+.badge.low-risk{background:var(--green-bg);color:var(--green)}
+.badge.med-risk{background:var(--amber-bg);color:var(--amber)}
+.badge.high-risk{background:var(--red-bg);color:var(--red)}
+.score-bar{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden}
 .score-fill{height:100%;border-radius:3px}
-.score-high{background:#7ecf5a}.score-med{background:#ba7517}.score-low{background:#e24b4a}
+.score-high{background:var(--green)}.score-med{background:var(--amber)}.score-low{background:var(--red)}
 .video-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .15s,transform .15s}
-.video-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.video-card:hover{border-color:var(--green);transform:translateY(-1px)}
 .thumb-wrap{position:relative;background:var(--bg2);aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .thumb-wrap img{width:100%;height:100%;object-fit:cover}
-.thumb-placeholder{font-size:36px}
-.score-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.85);color:#7ecf5a;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
-.video-info{padding:12px 14px}
-.video-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
-.video-meta{font-size:11px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.input{padding:7px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;width:100%}
-.input:focus{outline:none;border-color:#185fa5;box-shadow:0 0 0 2px rgba(24,95,165,0.12)}
+.thumb-placeholder{font-size:32px}
+.score-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.85);color:var(--green);font-size:12px;font-weight:700;padding:2px 7px;border-radius:4px}
+.spike-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.85);color:var(--amber);font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
+.video-info{padding:10px 12px}
+.video-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
+.video-meta{font-size:11px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.input{padding:7px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;width:100%}
+.input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px var(--green-bg)}
 select.input{cursor:pointer}
-.textarea{padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;width:100%;resize:vertical;min-height:90px}
-.textarea:focus{outline:none;border-color:#185fa5}
-.form-row{margin-bottom:14px}
-.form-label{font-size:12px;color:var(--text2);margin-bottom:5px;display:block;font-weight:600}
-.section-title{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--text)}
-.section-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
+.textarea{padding:10px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;width:100%;resize:vertical;min-height:80px}
+.textarea:focus{outline:none;border-color:var(--green)}
+.form-row{margin-bottom:12px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:4px;display:block;font-weight:600}
+.section-title{font-size:15px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.section-sub{font-size:13px;color:var(--text2);margin-bottom:14px}
 .table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:0.5px solid var(--border)}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:10px 14px;font-size:11px;color:var(--text3);font-weight:700;background:var(--bg2);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.4px}
-td{padding:10px 14px;font-size:13px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+th{text-align:left;padding:9px 13px;font-size:11px;color:var(--text3);font-weight:700;background:var(--bg2);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.4px}
+td{padding:9px 13px;font-size:13px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg2)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
-.modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);width:100%;max-width:760px;box-shadow:0 8px 40px rgba(0,0,0,0.2)}
-.modal-head{padding:18px 22px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
+.modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);width:100%;max-width:820px;box-shadow:0 8px 40px rgba(0,0,0,0.4)}
+.modal-head{padding:16px 20px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .modal-head h3{font-size:15px;font-weight:700;color:var(--text)}
-.modal-body{padding:20px 22px;max-height:75vh;overflow-y:auto}
-.modal-footer{padding:14px 22px;border-top:0.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
-.analysis-section{margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)}
-.analysis-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.analysis-label{font-size:10px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
-.analysis-value{font-size:13px;line-height:1.65;color:var(--text)}
-.analysis-list{list-style:none;padding:0}
-.analysis-list li{font-size:13px;line-height:1.65;padding:3px 0 3px 16px;color:var(--text);position:relative}
-.analysis-list li::before{content:"→";position:absolute;left:0;color:var(--text3)}
+.modal-body{padding:18px 20px;max-height:75vh;overflow-y:auto}
+.modal-footer{padding:12px 20px;border-top:0.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.al{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.av{font-size:13px;line-height:1.65;color:var(--text)}
+.a-sec{margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)}
+.a-sec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.a-list{list-style:none;padding:0}
+.a-list li{font-size:13px;line-height:1.6;padding:2px 0 2px 14px;color:var(--text);position:relative}
+.a-list li::before{content:"→";position:absolute;left:0;color:var(--green)}
 .loading-dots::after{content:"...";animation:dots 1.2s steps(3,end) infinite}
 @keyframes dots{0%,33%{content:"."}34%,66%{content:".."}67%,100%{content:"..."}}
-.empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
-.empty-icon{font-size:44px;margin-bottom:14px}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:12px}
 .empty-text{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text2)}
-.notification{position:fixed;bottom:24px;right:24px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 18px;font-size:13px;z-index:300;box-shadow:0 4px 24px rgba(0,0,0,0.15);max-width:320px;animation:slideIn .2s ease}
-@keyframes slideIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
-.banner{border-radius:var(--radius);padding:10px 16px;font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.banner.warn{background:rgba(240,160,64,0.15);border:0.5px solid #f0a040;color:#f0a040}
-.banner.info{background:rgba(74,158,47,0.15);border:0.5px solid #4a9e2f;color:#7ecf5a}
-.divider{height:0.5px;background:var(--border);margin:16px 0}
-.report-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:12px;border-left:3px solid #7ecf5a}
+#notification-container{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px;max-width:340px}
+.notification{background:#1e1e1c;border:0.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--text);box-shadow:0 4px 24px rgba(0,0,0,0.4);animation:slideIn .2s ease}
+@keyframes slideIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.banner{border-radius:var(--radius);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.banner.warn{background:var(--amber-bg);border:0.5px solid var(--amber);color:var(--amber)}
+.banner.info{background:var(--green-bg);border:0.5px solid var(--green);color:var(--green)}
+.banner.danger{background:var(--red-bg);border:0.5px solid var(--red);color:var(--red)}
+.divider{height:0.5px;background:var(--border);margin:14px 0}
+.report-card{background:var(--bg);border:0.5px solid var(--border);border-left:3px solid var(--green);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:0.5px solid var(--border)}
 .settings-row:last-child{border-bottom:none}
-.ch-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:14px}
-.ch-avatar{width:48px;height:48px;border-radius:50%;background:var(--bg2);object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
-.ch-info{flex:1;min-width:0}
+.ch-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.ch-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg2);object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;border:0.5px solid var(--border)}
 .ch-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:2px}
 .ch-meta{font-size:12px;color:var(--text3)}
 .progress-bar{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin:8px 0}
-.progress-fill{height:100%;background:#185fa5;border-radius:2px;animation:prog 1.5s ease-in-out infinite}
+.progress-fill{height:100%;background:var(--green);border-radius:2px;animation:prog 1.5s ease-in-out infinite}
 @keyframes prog{0%{width:10%;margin-left:0}50%{width:50%;margin-left:25%}100%{width:10%;margin-left:90%}}
+.cluster-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;cursor:pointer;transition:border-color .15s}
+.cluster-card:hover{border-color:var(--green)}
+.cluster-name{font-weight:700;font-size:14px;color:var(--text);margin-bottom:6px}
+.cluster-stat{font-size:12px;color:var(--text3);margin-bottom:2px}
+.trend-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.trend-row:last-child{border-bottom:none}
+.trend-rank{font-size:18px;font-weight:700;color:var(--text3);min-width:28px}
+.tab-bar{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:6px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2)}
+.tab.active{background:var(--green-bg);color:var(--green);border-color:rgba(126,207,90,0.3)}
 </style>
 </head>
 <body>
@@ -112,29 +126,32 @@ tr:hover td{background:var(--bg2)}
   <div class="sidebar">
     <div class="sidebar-logo">
       <div class="brand">📺 TDUK</div>
-      <div class="sub">Viral Topic Finder</div>
+      <div class="sub">Viral Topic Finder v3.0</div>
     </div>
     <div class="nav-section">Main</div>
     <button class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span style="width:18px;text-align:center">🏠</span> Dashboard</button>
     <button class="nav-item" onclick="showPage('opportunities')" id="nav-opportunities"><span style="width:18px;text-align:center">🎯</span> Opportunities</button>
     <button class="nav-item" onclick="showPage('report')" id="nav-report"><span style="width:18px;text-align:center">📋</span> Daily Report</button>
+    <div class="nav-section">Intelligence</div>
+    <button class="nav-item" onclick="showPage('clusters')" id="nav-clusters"><span style="width:18px;text-align:center">🗂️</span> Topic Clusters</button>
+    <button class="nav-item" onclick="showPage('trends')" id="nav-trends"><span style="width:18px;text-align:center">📈</span> Trend Intelligence</button>
     <div class="nav-section">Data</div>
     <button class="nav-item" onclick="showPage('channels')" id="nav-channels"><span style="width:18px;text-align:center">📡</span> Channels</button>
     <button class="nav-item" onclick="showPage('videos')" id="nav-videos"><span style="width:18px;text-align:center">🎬</span> All Videos</button>
     <div class="nav-section">Config</div>
     <button class="nav-item" onclick="showPage('settings')" id="nav-settings"><span style="width:18px;text-align:center">⚙️</span> Settings</button>
     <div style="flex:1"></div>
-    <div style="padding:12px 16px;font-size:11px;color:var(--text3);border-top:0.5px solid var(--border)">
+    <div style="padding:10px 14px;font-size:11px;color:var(--text3);border-top:0.5px solid var(--border)">
       <div id="last-refresh-label">Never refreshed</div>
-      <div style="margin-top:2px">TDUK v2.0 — YouTube API</div>
+      <div style="margin-top:2px">TDUK v3.0</div>
     </div>
   </div>
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="page-title">Dashboard</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn" onclick="rescoreAll()" id="rescore-btn">🔄 Re-score All</button>
-        <button class="btn success" onclick="fetchAllChannels()" id="fetch-all-btn">⬇️ Fetch All Channels</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn success" onclick="fetchAllChannels()" id="fetch-all-btn">⬇️ Fetch All</button>
+        <button class="btn" onclick="rescoreAll()" id="rescore-btn">🔄 Re-score</button>
         <button class="btn primary" onclick="showPage('opportunities')">🎯 Opportunities</button>
       </div>
     </div>
@@ -146,227 +163,301 @@ tr:hover td{background:var(--bg2)}
 
 <script>
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let state = { channels:[], videos:[], settings:{ claudeApiKey:'', youtubeApiKey:'', lastRefresh:null } };
-function loadState(){ try{ const s=localStorage.getItem('tduk_v4'); if(s) state={...state,...JSON.parse(s)}; }catch(e){} }
-function saveState(){ try{ localStorage.setItem('tduk_v4',JSON.stringify(state)); }catch(e){} }
+let state = {
+  channels:[], videos:[],
+  settings:{
+    claudeApiKey:'', youtubeApiKey:'', lastRefresh:null,
+    videosPerChannel:50,
+    spikeThreshold:2,
+    opportunityThreshold:60,
+    freshnessWeight:15,
+    trendWeight:20,
+    tdukFormulaWeight:25,
+    policyRiskWeight:15
+  }
+};
+function loadState(){ try{ const s=localStorage.getItem('tduk_v5'); if(s) state={...state,...JSON.parse(s)}; }catch(e){} }
+function saveState(){ try{ localStorage.setItem('tduk_v5',JSON.stringify(state)); }catch(e){} }
 loadState();
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function esc(s){ return !s?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtNum(n){ n=parseInt(n)||0; if(n>=1000000) return (n/1000000).toFixed(1)+'M'; if(n>=1000) return Math.round(n/1000)+'K'; return n.toString(); }
 function videoAge(d){ const h=Math.floor((Date.now()-new Date(d).getTime())/3600000),dy=Math.floor(h/24); if(dy===0) return h+'h ago'; if(dy<7) return dy+'d ago'; if(dy<30) return Math.floor(dy/7)+'w ago'; return Math.floor(dy/30)+'mo ago'; }
-function getPolicyRisk(s){ if(s>=70) return {label:'High risk',cls:'high-risk'}; if(s>=35) return {label:'Med risk',cls:'med-risk'}; return {label:'Low risk',cls:'low-risk'}; }
+function ageDays(d){ return (Date.now()-new Date(d).getTime())/86400000; }
+function ageHours(d){ return (Date.now()-new Date(d).getTime())/3600000; }
+function getPR(s){ if(s>=70) return {label:'High risk',cls:'high-risk'}; if(s>=35) return {label:'Med risk',cls:'med-risk'}; return {label:'Low risk',cls:'low-risk'}; }
 function getFlag(f){ return {'MAKE NOW':{cls:'make-now',icon:'🔥'},WATCH:{cls:'watch',icon:'👀'},'POLICY RISK':{cls:'policy-risk',icon:'⚠️'},IGNORE:{cls:'ignore',icon:'—'}}[f]||{cls:'watch',icon:'👀'}; }
+function cleanMd(s){ return s?s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():''; }
 function notify(msg,type='info'){
-  const el=document.createElement('div');
-  el.className='notification';
-  const colors={success:'#7ecf5a',error:'#e05555',info:'#6ab0f5'};
-  const bgColors={success:'rgba(74,158,47,0.15)',error:'rgba(224,85,85,0.15)',info:'rgba(106,176,245,0.15)'};
-  el.style.cssText=`border-left:3px solid ${colors[type]||colors.info};background:#1e1e1c;color:#e8e6df;box-shadow:0 4px 24px rgba(0,0,0,0.4)`;
-  // Add message and close button
-  el.innerHTML=`<div style="display:flex;align-items:flex-start;gap:10px;justify-content:space-between">
-    <span style="font-size:13px;color:#e8e6df;line-height:1.5">${msg}</span>
-    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:0;line-height:1;flex-shrink:0">✕</button>
-  </div>`;
+  const el=document.createElement('div'); el.className='notification';
+  const c={success:'var(--green)',error:'var(--red)',info:'var(--blue)',warn:'var(--amber)'}[type]||'var(--blue)';
+  el.style.borderLeft='3px solid '+c;
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><span style="color:var(--text);line-height:1.5">${msg}</span><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;padding:0">✕</button></div>`;
   document.getElementById('notification-container').appendChild(el);
-  // No auto-dismiss - user must close it
 }
 function updateRefreshLabel(){ const el=document.getElementById('last-refresh-label'); if(el) el.textContent=state.settings.lastRefresh?'Updated: '+new Date(state.settings.lastRefresh).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'Never refreshed'; }
-function cleanMd(s){ return s?s.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():''; }
 
-// ── SCORING ───────────────────────────────────────────────────────────────────
-function scoreVideo(video, channel){
-  const avg = channel ? channel.avgViews : 50000;
-  const ratio = video.views / avg;
-  const ageDays = (Date.now() - new Date(video.uploadDate).getTime()) / 86400000;
-  const velocity = video.views / Math.max(ageDays, 0.5);
-  const t = video.title.toLowerCase();
-  const power = ['changed','happened','reset','back','stopped','update','warning','check','need to know','just','secret','removed','banned','new','amazon','firestick','google tv','android tv','vpn','privacy','settings','alert','exposed','fixed'];
-  const generic = ['top 10','best apps','tutorial','beginners guide','how to setup'];
-  let relevance = 50;
-  if(/(firestick|fire tv|amazon fire|google tv|android tv|streaming device|vpn|privacy)/.test(t)) relevance += 30;
-  if(/(kodi|iptv|addon)/.test(t)) relevance += 10;
-  let titleStr = 30;
-  power.forEach(p=>{ if(t.includes(p)) titleStr += 7; });
-  generic.forEach(p=>{ if(t.includes(p)) titleStr -= 12; });
-  titleStr = Math.min(100, Math.max(0, titleStr));
-  let policyRisk = 5;
-  if(/(kodi|iptv|addon pack)/.test(t)) policyRisk = 45;
-  if(/(piracy|illegal|free movies|free tv|bypass|cracked|clone)/.test(t)) policyRisk = 85;
-  if(/(apk install|downloader code|jailbreak)/.test(t)) policyRisk = 60;
-  let vpnPotential = 20;
-  if(/(vpn|privacy|tracking|data|isp|throttl)/.test(t)) vpnPotential = 85;
-  if(/(streaming|netflix|prime|disney)/.test(t)) vpnPotential = 50;
-  const overall = Math.round(
-    Math.min(100,ratio*20)*0.25 +
-    Math.min(100,(velocity/5000)*100)*0.20 +
-    Math.max(0,100-ageDays*4)*0.15 +
-    relevance*0.20 + titleStr*0.15 + vpnPotential*0.05
-  );
-  let flag = 'WATCH';
-  if(policyRisk>=70) flag='POLICY RISK';
-  else if(overall>=75) flag='MAKE NOW';
-  else if(overall<35) flag='IGNORE';
-  return { score:overall, flag, scoreBreakdown:{
-    viewsVsAvg: Math.round(ratio*10)/10,
-    velocity: Math.round(velocity),
-    recency: Math.round(Math.max(0,100-ageDays*4)),
-    relevance: Math.round(relevance),
-    titleStrength: Math.round(titleStr),
-    policyRisk: Math.round(policyRisk),
-    vpnPotential: Math.round(vpnPotential)
-  }};
+// ── TOPIC CLUSTERS ────────────────────────────────────────────────────────────
+const CLUSTERS = [
+  { id:'amazon-changed', name:'🔄 Amazon Changed', keywords:['amazon changed','amazon added','amazon removed','amazon reset','amazon update','amazon new'] },
+  { id:'update-warning', name:'⚠️ Update Warning', keywords:['update warning','new update','important update','firestick update','fire tv update','google tv update','android tv update'] },
+  { id:'something-back', name:'🔙 Something Is Back', keywords:['is back','came back','returned','back again','now available'] },
+  { id:'stopped-working', name:'🛑 Stopped Working', keywords:['stopped working','not working','broken','fixed','no longer','removed'] },
+  { id:'hidden-settings', name:'🔒 Hidden & Privacy', keywords:['hidden setting','secret setting','privacy setting','privacy','data tracking','surveillance'] },
+  { id:'vpn', name:'🔐 VPN', keywords:['vpn','virtual private network','isp','ip address'] },
+  { id:'kodi', name:'📦 Kodi & Addons', keywords:['kodi','addon','add-on','build','wizard'] },
+  { id:'streaming-apps', name:'📺 Streaming Apps', keywords:['app','netflix','prime','disney','plex','jellyfin','stremio','streaming'] },
+  { id:'device-comparison', name:'📱 Device Comparison', keywords:['vs','comparison','better than','upgrade','switch','alternative'] },
+  { id:'google-tv', name:'📡 Google TV', keywords:['google tv','chromecast','android tv'] },
+  { id:'downloader', name:'⬇️ Downloader & APK', keywords:['downloader','apk','sideload','install','code'] },
+  { id:'check-now', name:'⚡ Check This Now', keywords:['check this','check now','do this now','must do','users need to know','firestick users'] },
+  { id:'other', name:'📌 Other', keywords:[] }
+];
+
+function getCluster(title) {
+  const t = title.toLowerCase();
+  for (const c of CLUSTERS) {
+    if (c.id === 'other') continue;
+    if (c.keywords.some(k => t.includes(k))) return c.id;
+  }
+  return 'other';
 }
 
-async function fetchAllChannels(){
-  if(!state.settings.youtubeApiKey){ notify('Add your YouTube API key in Settings first','error'); return; }
-  if(!state.channels.length){ notify('No channels added yet — go to Channels to add some','error'); return; }
-  const btn=document.getElementById('fetch-all-btn');
-  btn.disabled=true;
-  let totalAdded=0, totalUpdated=0, failed=[];
-  for(let i=0; i<state.channels.length; i++){
-    const ch=state.channels[i];
-    btn.textContent=`⬇️ Fetching ${i+1}/${state.channels.length}: ${ch.name}...`;
-    try {
-      const resp=await fetch('/.netlify/functions/youtube',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({action:'fetchVideos',channelId:ch.youtubeChannelId,apiKey:state.settings.youtubeApiKey})
-      });
-      const data=await resp.json();
-      if(!resp.ok) throw new Error(data.error||'Fetch failed');
-      const newVideos=data.videos||[];
-      if(newVideos.length>0){
-        const avgViews=Math.round(newVideos.reduce((s,v)=>s+v.views,0)/newVideos.length);
-        state.channels=state.channels.map(c=>c.id===ch.id?{...c,avgViews}:c);
-      }
-      newVideos.forEach(v=>{
-        const existing=state.videos.find(x=>x.youtubeId===v.youtubeId);
-        const scored=scoreVideo(v,ch);
-        if(existing){
-          state.videos=state.videos.map(x=>x.youtubeId===v.youtubeId?{...x,...v,...scored}:x);
-          totalUpdated++;
-        } else {
-          state.videos.push({id:'v'+Date.now()+Math.random(),channelId:ch.id,channelName:ch.name,transcript:'',analysis:null,...v,...scored});
-          totalAdded++;
-        }
-      });
-    } catch(e){
-      failed.push(ch.name);
+// ── SCORING ENGINE ────────────────────────────────────────────────────────────
+const TDUK_BOOST = ['amazon changed','amazon added','amazon removed','amazon reset','update warning','check this now','something happened','is back','firestick users need to know','new firestick','hidden setting','privacy setting','firestick warning','important update','do this now','just changed','just happened','stopped working'];
+const TDUK_REDUCE = ['top 10 apps','best apps','tutorial','beginners guide','how to setup','basic settings'];
+const POLICY_HIGH = ['piracy','illegal','free movies for free','bypass paid','cracked','cloned app','copyright','streaming site'];
+const POLICY_MED = ['kodi','iptv','addon','apk install','downloader code','jailbreak'];
+
+function calcChannelStats(channelId) {
+  const vids = state.videos
+    .filter(v => v.channelId === channelId && v.views > 0)
+    .sort((a,b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+  if (!vids.length) return { avg10:0, avg20:0, avg50:0, avgPerDay:0, uploadFreq:0 };
+  const avg = (arr) => arr.length ? Math.round(arr.reduce((s,v)=>s+v.views,0)/arr.length) : 0;
+  const last10 = vids.slice(0,10).map(v=>v.views);
+  const last20 = vids.slice(0,20).map(v=>v.views);
+  const last50 = vids.slice(0,50).map(v=>v.views);
+  // Upload frequency: days between uploads
+  let uploadFreq = 0;
+  if (vids.length >= 2) {
+    const gaps = [];
+    for (let i=0;i<Math.min(vids.length-1,10);i++) {
+      gaps.push((new Date(vids[i].uploadDate)-new Date(vids[i+1].uploadDate))/86400000);
     }
+    uploadFreq = Math.round(gaps.reduce((s,g)=>s+g,0)/gaps.length*10)/10;
   }
-  state.settings.lastRefresh=new Date().toISOString();
-  saveState();
-  btn.disabled=false;
-  btn.textContent='⬇️ Fetch All Channels';
-  updateRefreshLabel();
-  const failMsg=failed.length?` (${failed.length} failed: ${failed.join(', ')})`:'';
-  notify(`✅ Done — ${totalAdded} new videos, ${totalUpdated} updated across ${state.channels.length} channels${failMsg}`,'success');
-  showPage(document.querySelector('.nav-item.active')?.id?.replace('nav-','')||'dashboard');
+  const avgPerDay = avg(last20) / Math.max(uploadFreq,1);
+  return { avg10:avg(last10), avg20:avg(last20), avg50:avg(last50), avgPerDay:Math.round(avgPerDay), uploadFreq };
+}
+
+function scoreVideo(video, channel) {
+  const stats = calcChannelStats(video.channelId);
+  const avg20 = stats.avg20 || channel?.avgViews || 50000;
+  const avg10 = stats.avg10 || avg20;
+  const hours = Math.max(ageHours(video.uploadDate), 1);
+  const days = hours / 24;
+
+  // Spike Score: views vs 20-video avg
+  const spikeScore = video.views / avg20;
+  // Momentum Score: views vs 10-video avg
+  const momentumScore = video.views / Math.max(avg10, 1);
+  // Velocity: views per hour
+  const velocity = video.views / hours;
+  // Freshness Score
+  let freshnessScore = 0;
+  if (hours < 24) freshnessScore = 100;
+  else if (hours < 72) freshnessScore = 80;
+  else if (days < 7) freshnessScore = 60;
+  else if (days < 14) freshnessScore = 40;
+  else if (days < 30) freshnessScore = 20;
+  else freshnessScore = Math.max(0, 20 - days);
+
+  // Topic relevance
+  const t = video.title.toLowerCase();
+  let relevance = 40;
+  if (/(firestick|fire tv|amazon fire|google tv|android tv|streaming device|vpn|privacy)/.test(t)) relevance += 35;
+  if (/(kodi|iptv|addon)/.test(t)) relevance += 10;
+
+  // TDUK Formula weighting
+  let tdukBoost = 0;
+  TDUK_BOOST.forEach(k => { if (t.includes(k)) tdukBoost += 12; });
+  TDUK_REDUCE.forEach(k => { if (t.includes(k)) tdukBoost -= 10; });
+  tdukBoost = Math.min(50, Math.max(-30, tdukBoost));
+
+  // Policy risk
+  let policyRisk = 5;
+  if (POLICY_MED.some(k => t.includes(k))) policyRisk = 45;
+  if (POLICY_HIGH.some(k => t.includes(k))) policyRisk = 85;
+
+  // VPN potential
+  let vpnPotential = 20;
+  if (/(vpn|privacy|tracking|data|isp|throttl|geo.restrict)/.test(t)) vpnPotential = 85;
+  else if (/(streaming|netflix|prime|disney|firestick|fire tv)/.test(t)) vpnPotential = 50;
+
+  // Weighted opportunity score
+  const w = state.settings;
+  const spikeComponent = Math.min(100, spikeScore * 15);
+  const velocityComponent = Math.min(100, (velocity / 3000) * 100);
+  const overall = Math.round(
+    spikeComponent * 0.30 +
+    velocityComponent * ((w.trendWeight||20)/100) +
+    freshnessScore * ((w.freshnessWeight||15)/100) +
+    relevance * 0.20 +
+    Math.min(50,Math.max(0,tdukBoost+25)) * ((w.tdukFormulaWeight||25)/100)
+  );
+
+  let flag = 'WATCH';
+  if (policyRisk >= 70) flag = 'POLICY RISK';
+  else if (overall >= 75 && spikeScore >= (w.spikeThreshold||2)) flag = 'MAKE NOW';
+  else if (overall < 30) flag = 'IGNORE';
+
+  // Visual indicators
+  let indicator = '';
+  if (spikeScore >= 20) indicator = '🚀';
+  else if (spikeScore >= 10) indicator = '🔥';
+  else if (spikeScore >= 5) indicator = '⭐';
+  else if (hours < 72) indicator = '🆕';
+
+  return {
+    score: Math.min(100, Math.max(0, overall)),
+    flag,
+    indicator,
+    scoreBreakdown: {
+      spikeScore: Math.round(spikeScore*10)/10,
+      momentumScore: Math.round(momentumScore*10)/10,
+      velocity: Math.round(velocity),
+      freshnessScore: Math.round(freshnessScore),
+      relevance: Math.round(relevance),
+      tdukBoost: Math.round(tdukBoost),
+      policyRisk: Math.round(policyRisk),
+      vpnPotential: Math.round(vpnPotential),
+      avg10, avg20
+    }
+  };
 }
 
 function rescoreAll(){
-  state.videos = state.videos.map(v=>{ const ch=state.channels.find(c=>c.id===v.channelId); return {...v,...scoreVideo(v,ch)}; });
+  state.videos = state.videos.map(v => {
+    const ch = state.channels.find(c=>c.id===v.channelId);
+    return {...v, ...scoreVideo(v,ch), cluster: getCluster(v.title)};
+  });
   state.settings.lastRefresh = new Date().toISOString();
   saveState(); updateRefreshLabel(); notify('All videos re-scored','success');
   showPage(document.querySelector('.nav-item.active')?.id?.replace('nav-','')||'dashboard');
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
+const PAGE_TITLES = {dashboard:'Dashboard',opportunities:'Opportunities',report:'Daily Report',clusters:'Topic Clusters',trends:'Trend Intelligence',channels:'Channels',videos:'All Videos',settings:'Settings'};
+
 function showPage(page){
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   const nav=document.getElementById('nav-'+page); if(nav) nav.classList.add('active');
-  const titles={dashboard:'Dashboard',opportunities:'Top Opportunities',report:'Daily Report',channels:'Competitor Channels',videos:'All Videos',settings:'Settings'};
-  document.getElementById('page-title').textContent=titles[page]||page;
-  const c=document.getElementById('content'); c.innerHTML=''; c._flagFilter='all';
-  ({dashboard:renderDashboard,opportunities:renderOpportunities,report:renderDailyReport,channels:renderChannels,videos:renderVideos,settings:renderSettings})[page]?.(c);
+  document.getElementById('page-title').textContent=PAGE_TITLES[page]||page;
+  const c=document.getElementById('content'); c.innerHTML=''; c._flagFilter='all'; c._tab='';
+  ({dashboard:renderDashboard,opportunities:renderOpportunities,report:renderDailyReport,clusters:renderClusters,trends:renderTrends,channels:renderChannels,videos:renderVideos,settings:renderSettings})[page]?.(c);
   updateRefreshLabel();
 }
 
 // ── VIDEO CARD ────────────────────────────────────────────────────────────────
 function videoCard(v){
   const fb=getFlag(v.flag);
-  const pr=getPolicyRisk(v.scoreBreakdown?.policyRisk||0);
+  const pr=getPR(v.scoreBreakdown?.policyRisk||0);
   const ch=state.channels.find(c=>c.id===v.channelId);
-  const ratio=((v.views/(ch?ch.avgViews:50000))).toFixed(1);
+  const avg20=v.scoreBreakdown?.avg20||(ch?.avgViews||50000);
+  const spike=v.scoreBreakdown?.spikeScore||0;
   const sc=v.score>=70?'score-high':v.score>=45?'score-med':'score-low';
   return `<div class="video-card">
     <div class="thumb-wrap">
       ${v.thumbnail?`<img src="${esc(v.thumbnail)}" alt="" loading="lazy">`:`<div class="thumb-placeholder">🎬</div>`}
       <div class="score-badge">${v.score}</div>
+      ${spike>=2?`<div class="spike-badge">${v.indicator||''}${spike}×</div>`:''}
     </div>
     <div class="video-info">
-      <div class="video-title" style="color:var(--text);font-weight:600">${esc(v.title)}</div>
+      <div class="video-title">${esc(v.title)}</div>
       <div class="video-meta">
         <span>📡 ${esc(v.channelName)}</span>
         <span>👁 ${fmtNum(v.views)}</span>
         <span>🕐 ${videoAge(v.uploadDate)}</span>
-        <span style="color:${parseFloat(ratio)>=3?'#7ecf5a':parseFloat(ratio)>=1.5?'#f0a040':'var(--text3)'}">📈 ${ratio}× avg</span>
+        <span style="color:${spike>=5?'var(--green)':spike>=2?'var(--amber)':'var(--text3)'}">📈 ${spike}× avg</span>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px">
         <span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span>
         <span class="badge ${pr.cls}">${pr.label}</span>
       </div>
-      <div class="score-bar" style="margin-bottom:10px"><div class="score-fill ${sc}" style="width:${v.score}%"></div></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn primary" style="font-size:11px;padding:4px 10px" onclick="openVideoModal('${v.id}')">🤖 Analyse</button>
-        <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:11px;padding:4px 10px">▶ Watch</a>
+      <div class="score-bar" style="margin-bottom:9px"><div class="score-fill ${sc}" style="width:${v.score}%"></div></div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn primary" style="font-size:11px;padding:4px 9px" onclick="openVideoModal('${v.id}')">🤖 Analyse</button>
+        <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:11px;padding:4px 9px">▶ Watch</a>
       </div>
     </div>
   </div>`;
 }
 
-// ── PAGES ─────────────────────────────────────────────────────────────────────
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function renderDashboard(c){
   const vids=state.videos;
-  const top=[...vids].sort((a,b)=>b.score-a.score).slice(0,6);
+  const makeNow=vids.filter(v=>v.flag==='MAKE NOW');
+  const top=[...vids].sort((a,b)=>b.score-a.score).slice(0,8);
+  const fresh=vids.filter(v=>ageHours(v.uploadDate)<72).sort((a,b)=>b.score-a.score).slice(0,4);
   const noKey=!state.settings.claudeApiKey||!state.settings.youtubeApiKey;
   c.innerHTML=`
-    ${noKey?`<div class="banner warn">⚙️ <div><strong>Setup required</strong> — Add your Claude and YouTube API keys in <button class="btn" style="padding:2px 8px;font-size:12px;margin-left:6px" onclick="showPage('settings')">Settings →</button></div></div>`:''}
-    <div class="grid-4" style="margin-bottom:20px">
-      <div class="metric-card"><div class="metric-label">Channels tracked</div><div class="metric-value">${state.channels.length}</div></div>
-      <div class="metric-card"><div class="metric-label">🔥 Make now</div><div class="metric-value" style="color:#7ecf5a">${vids.filter(v=>v.flag==='MAKE NOW').length}</div></div>
-      <div class="metric-card"><div class="metric-label">👀 Watch</div><div class="metric-value" style="color:#f0a040">${vids.filter(v=>v.flag==='WATCH').length}</div></div>
-      <div class="metric-card"><div class="metric-label">⚠️ Policy risk</div><div class="metric-value" style="color:#e05555">${vids.filter(v=>v.flag==='POLICY RISK').length}</div></div>
+    ${noKey?`<div class="banner warn">⚙️ Add your API keys in <button class="btn" style="padding:2px 8px;font-size:12px;margin-left:4px" onclick="showPage('settings')">Settings →</button></div>`:''}
+    <div class="grid-5" style="margin-bottom:18px">
+      <div class="metric-card"><div class="metric-label">Channels</div><div class="metric-value">${state.channels.length}</div></div>
+      <div class="metric-card"><div class="metric-label">🔥 Make Now</div><div class="metric-value" style="color:var(--green)">${makeNow.length}</div></div>
+      <div class="metric-card"><div class="metric-label">🆕 Fresh (<72h)</div><div class="metric-value" style="color:var(--blue)">${fresh.length}</div></div>
+      <div class="metric-card"><div class="metric-label">📹 Total Videos</div><div class="metric-value">${vids.length}</div></div>
+      <div class="metric-card"><div class="metric-label">⚠️ Policy Risk</div><div class="metric-value" style="color:var(--red)">${vids.filter(v=>v.flag==='POLICY RISK').length}</div></div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
-      <div><div class="section-title" style="color:var(--text)">Top opportunities right now</div><div class="section-sub">Videos outperforming their channel average — sorted by opportunity score</div></div>
+    ${fresh.length?`<div style="margin-bottom:18px">
+      <div class="section-title" style="margin-bottom:10px">🆕 Fresh Opportunities — Last 72 Hours</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">${fresh.map(videoCard).join('')}</div>
+    </div>`:''}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+      <div class="section-title">Top Opportunities Right Now</div>
       <button class="btn primary" onclick="showPage('opportunities')">View all →</button>
     </div>
-    ${top.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">${top.map(videoCard).join('')}</div>`
-    :`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">No videos yet</div><div style="font-size:13px;color:var(--text3);margin-bottom:16px">Add competitor channels and fetch their latest videos</div><button class="btn primary" onclick="showPage('channels')">+ Add Channels →</button></div>`}`;
+    ${top.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">${top.map(videoCard).join('')}</div>`
+    :`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">No videos yet</div><div style="font-size:13px;margin-bottom:14px">Click ⬇️ Fetch All to load competitor videos</div><button class="btn primary" onclick="fetchAllChannels()">⬇️ Fetch All Channels</button></div>`}`;
 }
 
+// ── OPPORTUNITIES ─────────────────────────────────────────────────────────────
 function renderOpportunities(c){
   const fl=c._flagFilter||'all';
   const filters=[{val:'all',label:'All'},{val:'MAKE NOW',label:'🔥 Make now'},{val:'WATCH',label:'👀 Watch'},{val:'POLICY RISK',label:'⚠️ Policy risk'},{val:'IGNORE',label:'— Ignore'}];
   const sorted=[...state.videos].sort((a,b)=>b.score-a.score);
   const filtered=fl==='all'?sorted:sorted.filter(v=>v.flag===fl);
   c.innerHTML=`
-    <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap">${filters.map(f=>`<button class="btn ${f.val===fl?'primary':''}" onclick="setOppFilter('${f.val}')">${f.label}</button>`).join('')}</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
+    <div class="tab-bar">${filters.map(f=>`<button class="tab ${f.val===fl?'active':''}" onclick="setOppFilter('${f.val}')">${f.label} <span style="opacity:0.6;font-size:11px">${fl===f.val?filtered.length:(f.val==='all'?sorted.length:sorted.filter(v=>v.flag===f.val).length)}</span></button>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">
       ${filtered.length?filtered.map(videoCard).join(''):`<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-text">No videos in this category</div></div>`}
     </div>`;
   c._flagFilter=fl;
 }
 window.setOppFilter=f=>{ const c=document.getElementById('content'); c._flagFilter=f; renderOpportunities(c); };
 
+// ── DAILY REPORT ──────────────────────────────────────────────────────────────
 function renderDailyReport(c){
   const makeNow=[...state.videos].filter(v=>v.flag==='MAKE NOW').sort((a,b)=>b.score-a.score);
-  const watch=[...state.videos].filter(v=>v.flag==='WATCH').sort((a,b)=>b.score-a.score).slice(0,3);
+  const watch=[...state.videos].filter(v=>v.flag==='WATCH').sort((a,b)=>b.score-a.score).slice(0,5);
   const today=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
   const rCard=(v,rank)=>{
     const fb=getFlag(v.flag);
-    const ch=state.channels.find(c=>c.id===v.channelId);
-    const ratio=((v.views/(ch?ch.avgViews:50000))).toFixed(1);
-    const pr=getPolicyRisk(v.scoreBreakdown?.policyRisk||0);
+    const pr=getPR(v.scoreBreakdown?.policyRisk||0);
     const sb=v.scoreBreakdown||{};
+    const spike=sb.spikeScore||0;
     const reasons=[];
-    if(parseFloat(ratio)>=3) reasons.push(`${ratio}× channel avg`);
-    if((sb.velocity||0)>5000) reasons.push(`${fmtNum(sb.velocity)} views/day`);
-    if((sb.recency||0)>80) reasons.push('Very recent');
+    if(spike>=5) reasons.push(`${spike}× spike score`);
+    else if(spike>=2) reasons.push(`${spike}× channel avg`);
+    if((sb.velocity||0)>3000) reasons.push(`${fmtNum(sb.velocity)} views/hr`);
+    if(ageHours(v.uploadDate)<72) reasons.push('Under 72h old');
     if((sb.vpnPotential||0)>=80) reasons.push('High VPN potential');
-    if(!reasons.length) reasons.push('Strong relevance score');
+    if((sb.tdukBoost||0)>=12) reasons.push('TDUK formula match');
+    if(!reasons.length) reasons.push('Strong relevance');
+
     const t=v.title.toLowerCase();
     let angle='';
     if(t.includes('changed')||t.includes('update')) angle='⚠️ Amazon Just Changed This on Your Firestick – Do This Now';
@@ -375,131 +466,259 @@ function renderDailyReport(c){
     else if(t.includes('vpn')||t.includes('privacy')) angle='🔒 This Privacy Setting Is Exposing You on Firestick – Fix It Now';
     else if(t.includes('warning')||t.includes('check')) angle='⚡ Firestick Warning – Check This Right Now';
     else angle='📺 This Happened on Firestick and Most Users Don\'t Know';
+
+    // Thumbnail text suggestion
+    const thumbTexts=['FIRESTICK ALERT','DO THIS NOW','CHECK THIS','AMAZON CHANGED IT','YOU NEED TO KNOW'];
+    const thumbSuggestion=thumbTexts[rank%thumbTexts.length];
+
     return `<div class="report-card">
-      <div style="display:flex;gap:14px;align-items:flex-start">
-        <div style="font-size:24px;font-weight:700;color:#7ecf5a;min-width:32px">#${rank}</div>
-        <div style="flex:1">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span><span class="badge ${pr.cls}">${pr.label}</span><span style="font-size:12px;color:var(--text3);align-self:center">Score: ${v.score}/100</span></div>
-          <div style="font-weight:700;margin-bottom:4px;color:var(--text);font-size:14px">${esc(v.title)}</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · 📈 ${ratio}× avg</div>
-          <div style="background:rgba(74,158,47,0.15);color:#7ecf5a;border-radius:var(--radius);padding:8px 12px;margin-bottom:8px;font-size:12px"><strong>Why outperforming:</strong> ${esc(reasons.join(' · '))}</div>
-          <div style="background:rgba(24,95,165,0.15);color:#6ab0f5;border-radius:var(--radius);padding:8px 12px;margin-bottom:10px;font-size:12px"><strong>TDUK angle:</strong> ${esc(angle)}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn primary" style="font-size:12px;padding:5px 12px" onclick="openVideoModal('${v.id}')">🤖 Full AI Analysis</button>
-            <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:12px;padding:5px 12px">▶ Watch original</a>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="font-size:22px;font-weight:700;color:var(--green);min-width:30px">#${rank}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px">
+            <span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span>
+            <span class="badge ${pr.cls}">${pr.label}</span>
+            <span style="font-size:11px;color:var(--text3);align-self:center">Score: <strong style="color:var(--green)">${v.score}</strong>/100 · Spike: <strong style="color:var(--amber)">${spike}×</strong></span>
+          </div>
+          <div style="font-weight:700;margin-bottom:3px;color:var(--text);font-size:14px">${esc(v.title)}</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · avg ${fmtNum(v.scoreBreakdown?.avg20||0)}</div>
+          <div style="background:var(--green-bg);border:0.5px solid rgba(126,207,90,0.3);border-radius:var(--radius);padding:7px 11px;margin-bottom:6px;font-size:12px;color:var(--green)"><strong>Why outperforming:</strong> ${esc(reasons.join(' · '))}</div>
+          <div style="background:var(--blue-bg);border:0.5px solid rgba(106,176,245,0.3);border-radius:var(--radius);padding:7px 11px;margin-bottom:6px;font-size:12px;color:var(--blue)"><strong>TDUK angle:</strong> ${esc(angle)}</div>
+          <div style="background:var(--bg2);border-radius:var(--radius);padding:7px 11px;margin-bottom:8px;font-size:12px;color:var(--text2)"><strong style="color:var(--text)">Thumbnail text:</strong> ${esc(thumbSuggestion)}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn primary" style="font-size:12px;padding:5px 11px" onclick="openVideoModal('${v.id}')">🤖 Full AI Analysis</button>
+            <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:12px;padding:5px 11px">▶ Watch</a>
           </div>
         </div>
       </div>
     </div>`;
   };
+
   c.innerHTML=`
-    <div class="card" style="margin-bottom:20px;border-left:3px solid #4a9e2f">
-      <div style="font-size:18px;font-weight:700;margin-bottom:4px;color:var(--text)">${today}</div>
-      <div style="font-size:13px;color:var(--text2)">${makeNow.length} make-now · ${watch.length} to watch · ${state.videos.length} total videos tracked</div>
+    <div class="card" style="margin-bottom:16px;border-left:3px solid var(--green)">
+      <div style="font-size:17px;font-weight:700;margin-bottom:3px;color:var(--text)">${today}</div>
+      <div style="font-size:13px;color:var(--text2)">${makeNow.length} make-now · ${watch.length} to watch · ${state.videos.length} total tracked</div>
     </div>
-    ${makeNow.length?`<div class="section-title" style="margin-bottom:12px;color:var(--text)">🔥 Make these now</div>${makeNow.map((v,i)=>rCard(v,i+1)).join('')}`:`<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-text">No make-now videos yet</div><div style="font-size:13px">Fetch videos from competitor channels to find opportunities</div></div>`}
-    ${watch.length?`<div class="section-title" style="margin-top:20px;margin-bottom:12px;color:var(--text)">👀 Keep watching</div>${watch.map((v,i)=>rCard(v,i+1)).join('')}`:''}`;
+    ${makeNow.length?`<div class="section-title" style="margin-bottom:10px">🔥 Make These Now</div>${makeNow.map((v,i)=>rCard(v,i+1)).join('')}`:`<div class="empty-state"><div class="empty-icon">🔥</div><div class="empty-text">No make-now videos yet</div><button class="btn primary" style="margin-top:12px" onclick="fetchAllChannels()">⬇️ Fetch All Channels</button></div>`}
+    ${watch.length?`<div class="section-title" style="margin-top:18px;margin-bottom:10px">👀 Worth Watching</div>${watch.map((v,i)=>rCard(v,i+1)).join('')}`:''}`;
 }
 
+// ── TOPIC CLUSTERS ────────────────────────────────────────────────────────────
+function renderClusters(c){
+  // Assign clusters to all videos first
+  const clusterData = {};
+  CLUSTERS.forEach(cl => {
+    const vids = state.videos.filter(v => getCluster(v.title) === cl.id);
+    if (!vids.length && cl.id !== 'other') return;
+    const avgViews = vids.length ? Math.round(vids.reduce((s,v)=>s+v.views,0)/vids.length) : 0;
+    const avgSpike = vids.length ? Math.round(vids.reduce((s,v)=>s+(v.scoreBreakdown?.spikeScore||0),0)/vids.length*10)/10 : 0;
+    const avgScore = vids.length ? Math.round(vids.reduce((s,v)=>s+v.score,0)/vids.length) : 0;
+    const best = vids.sort((a,b)=>b.score-a.score)[0];
+    clusterData[cl.id] = { ...cl, count: vids.length, avgViews, avgSpike, avgScore, best };
+  });
+
+  const sorted = Object.values(clusterData).filter(c=>c.count>0).sort((a,b)=>b.avgScore-a.avgScore);
+
+  c.innerHTML=`
+    <div class="section-sub">Videos grouped by topic. Shows which categories consistently outperform across the niche.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      ${sorted.map(cl=>`
+        <div class="cluster-card" onclick="showClusterVideos('${cl.id}')">
+          <div class="cluster-name">${cl.name}</div>
+          <div class="cluster-stat">📹 ${cl.count} videos</div>
+          <div class="cluster-stat">👁 Avg ${fmtNum(cl.avgViews)} views</div>
+          <div class="cluster-stat">📈 Avg spike: <span style="color:${cl.avgSpike>=3?'var(--green)':cl.avgSpike>=1.5?'var(--amber)':'var(--text3)'}">${cl.avgSpike}×</span></div>
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:11px;color:var(--text3)">Avg opp. score</span>
+            <span style="font-size:16px;font-weight:700;color:${cl.avgScore>=70?'var(--green)':cl.avgScore>=45?'var(--amber)':'var(--text3)'}">${cl.avgScore}</span>
+          </div>
+          <div class="score-bar" style="margin-top:4px"><div class="score-fill ${cl.avgScore>=70?'score-high':cl.avgScore>=45?'score-med':'score-low'}" style="width:${cl.avgScore}%"></div></div>
+          ${cl.best?`<div style="margin-top:8px;font-size:11px;color:var(--text3)">Best: <span style="color:var(--text2)">${esc(cl.best.title.substring(0,50))}${cl.best.title.length>50?'...':''}</span></div>`:''}
+        </div>`).join('')}
+    </div>`;
+}
+
+window.showClusterVideos = function(clusterId) {
+  const cl = CLUSTERS.find(c=>c.id===clusterId);
+  const vids = state.videos.filter(v=>getCluster(v.title)===clusterId).sort((a,b)=>b.score-a.score);
+  openModal(`<div class="modal" style="max-width:900px">
+    <div class="modal-head"><h3>${cl?.name||clusterId} — ${vids.length} videos</h3><button class="btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
+        ${vids.map(videoCard).join('')}
+      </div>
+    </div>
+  </div>`);
+};
+
+// ── TREND INTELLIGENCE ────────────────────────────────────────────────────────
+function renderTrends(c){
+  const tab = c._tab || 'spike';
+  const tabs = [
+    {id:'spike',label:'🔥 Top Spike Scores'},
+    {id:'score',label:'⭐ Top Opp. Scores'},
+    {id:'fresh',label:'🆕 Fresh (<72h)'},
+    {id:'velocity',label:'🚀 Fastest Growing'},
+    {id:'vpn',label:'🔒 VPN Potential'},
+    {id:'safe',label:'✅ Policy Safe'},
+  ];
+
+  const sorted = [...state.videos];
+  let filtered = [];
+  if (tab==='spike') filtered = sorted.sort((a,b)=>(b.scoreBreakdown?.spikeScore||0)-(a.scoreBreakdown?.spikeScore||0)).slice(0,15);
+  if (tab==='score') filtered = sorted.sort((a,b)=>b.score-a.score).slice(0,15);
+  if (tab==='fresh') filtered = sorted.filter(v=>ageHours(v.uploadDate)<72).sort((a,b)=>b.score-a.score).slice(0,15);
+  if (tab==='velocity') filtered = sorted.sort((a,b)=>(b.scoreBreakdown?.velocity||0)-(a.scoreBreakdown?.velocity||0)).slice(0,15);
+  if (tab==='vpn') filtered = sorted.sort((a,b)=>(b.scoreBreakdown?.vpnPotential||0)-(a.scoreBreakdown?.vpnPotential||0)).slice(0,15);
+  if (tab==='safe') filtered = sorted.filter(v=>(v.scoreBreakdown?.policyRisk||0)<35).sort((a,b)=>b.score-a.score).slice(0,15);
+
+  c.innerHTML=`
+    <div class="tab-bar">${tabs.map(t=>`<button class="tab ${t.id===tab?'active':''}" onclick="setTrendTab('${t.id}')">${t.label}</button>`).join('')}</div>
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      ${filtered.length?filtered.map((v,i)=>{
+        const sb=v.scoreBreakdown||{};
+        const stat = tab==='spike'?`${sb.spikeScore||0}× spike`:tab==='velocity'?`${fmtNum(sb.velocity||0)}/hr`:tab==='vpn'?`VPN: ${sb.vpnPotential||0}/100`:tab==='fresh'?videoAge(v.uploadDate):`Score: ${v.score}`;
+        const fb=getFlag(v.flag);
+        return `<div class="trend-row" style="padding:10px 14px">
+          <div class="trend-rank">${i+1}</div>
+          ${v.thumbnail?`<img src="${esc(v.thumbnail)}" style="width:60px;height:34px;object-fit:cover;border-radius:4px;flex-shrink:0">`:`<div style="width:60px;height:34px;background:var(--bg2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>`}
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px">${esc(v.title)}</div>
+            <div style="font-size:11px;color:var(--text3)">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-weight:700;color:var(--green);font-size:14px">${stat}</div>
+            <span class="badge ${fb.cls}" style="font-size:10px">${fb.icon} ${v.flag}</span>
+          </div>
+          <button class="btn primary" style="font-size:11px;padding:4px 8px;flex-shrink:0" onclick="openVideoModal('${v.id}')">🤖</button>
+        </div>`;
+      }).join(''):`<div class="empty-state"><div class="empty-icon">📈</div><div class="empty-text">No data yet</div></div>`}
+    </div>`;
+  c._tab=tab;
+}
+window.setTrendTab=t=>{ const c=document.getElementById('content'); c._tab=t; renderTrends(c); };
+
+// ── CHANNELS ──────────────────────────────────────────────────────────────────
 function renderChannels(c){
   const hasYtKey=!!state.settings.youtubeApiKey;
   c.innerHTML=`
-    ${!hasYtKey?`<div class="banner warn">⚙️ Add your YouTube API key in <button class="btn" style="padding:2px 8px;font-size:12px;margin-left:6px" onclick="showPage('settings')">Settings →</button> to enable auto-fetch</div>`:''}
-    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    ${!hasYtKey?`<div class="banner warn">⚙️ Add YouTube API key in <button class="btn" style="padding:2px 8px;font-size:12px;margin-left:4px" onclick="showPage('settings')">Settings →</button> to enable auto-fetch</div>`:''}
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
       <button class="btn primary" onclick="openAddChannelModal()">+ Add Channel</button>
     </div>
-    ${state.channels.length===0
-      ?`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">No channels yet</div><div style="font-size:13px;color:var(--text3);margin-bottom:16px">Add competitor channels to start tracking</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong>Suggested channels:</strong></div>
-        <div style="font-size:13px;color:var(--text2)">@MyMateVince · @Troypoint · @EliasTech · @SmartDNSProxy · @TheStreamingAdvisor · @FireTVGuru · @AFTVnews</div></div>`
-      :`<div style="display:flex;flex-direction:column;gap:12px">${state.channels.map(ch=>{
-        const vids=state.videos.filter(v=>v.channelId===ch.id);
-        const makeNow=vids.filter(v=>v.flag==='MAKE NOW').length;
-        return `<div class="ch-card">
-          ${ch.thumbnail?`<img class="ch-avatar" src="${esc(ch.thumbnail)}" alt="">`:`<div class="ch-avatar">📺</div>`}
-          <div class="ch-info">
-            <div class="ch-name" style="color:var(--text)">${esc(ch.name)}</div>
-            <div class="ch-meta">${fmtNum(ch.subscribers)} subscribers · avg ${fmtNum(ch.avgViews)} views · ${vids.length} videos tracked${makeNow?` · <span style="color:#3b6d11;font-weight:700">${makeNow} make-now</span>`:''}</div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn success" style="font-size:12px;padding:5px 12px" onclick="fetchChannelVideos('${ch.id}')" id="fetch-btn-${ch.id}">⬇️ Fetch Latest Videos</button>
-            <button class="btn" style="font-size:12px;padding:5px 12px" onclick="openEditChannelModal('${ch.id}')">Edit</button>
-            <button class="btn danger" style="font-size:12px;padding:5px 12px" onclick="deleteChannel('${ch.id}')">Delete</button>
-          </div>
-        </div>`;
-      }).join('')}</div>`}`;
+    ${state.channels.length===0?`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">No channels yet</div><div style="font-size:13px;margin-top:6px;color:var(--text2)">Suggested: @MyMateVince · @Troypoint · @EliasTech · @SmartDNSProxy · @AFTVnews</div></div>`
+    :`<div style="display:flex;flex-direction:column;gap:10px">${state.channels.map(ch=>{
+      const vids=state.videos.filter(v=>v.channelId===ch.id);
+      const makeNow=vids.filter(v=>v.flag==='MAKE NOW').length;
+      const stats=calcChannelStats(ch.id);
+      return `<div class="ch-card">
+        ${ch.thumbnail?`<img class="ch-avatar" src="${esc(ch.thumbnail)}" alt="">`:`<div class="ch-avatar">📺</div>`}
+        <div style="flex:1;min-width:0">
+          <div class="ch-name">${esc(ch.name)}</div>
+          <div class="ch-meta">${fmtNum(ch.subscribers)} subs · ${vids.length} videos tracked${makeNow?` · <span style="color:var(--green);font-weight:700">${makeNow} make-now</span>`:''}</div>
+          ${stats.avg20?`<div class="ch-meta" style="margin-top:3px">Avg 10: ${fmtNum(stats.avg10)} · Avg 20: ${fmtNum(stats.avg20)} · Uploads every ~${stats.uploadFreq}d</div>`:''}
+        </div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn success" style="font-size:12px;padding:5px 10px" onclick="fetchChannelVideos('${ch.id}')" id="fetch-btn-${ch.id}">⬇️ Fetch Videos</button>
+          <button class="btn" style="font-size:12px;padding:5px 10px" onclick="openEditChannelModal('${ch.id}')">Edit</button>
+          <button class="btn danger" style="font-size:12px;padding:5px 10px" onclick="deleteChannel('${ch.id}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('')}</div>`}`;
 }
 
+// ── VIDEOS ────────────────────────────────────────────────────────────────────
 function renderVideos(c){
   const sorted=[...state.videos].sort((a,b)=>b.score-a.score);
   c.innerHTML=`
-    <div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div style="font-size:13px;color:var(--text2)">${sorted.length} videos tracked across ${state.channels.length} channels</div>
-      <button class="btn primary" onclick="openAddVideoModal()">+ Add Video Manually</button>
+    <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13px;color:var(--text2)">${sorted.length} videos across ${state.channels.length} channels</div>
+      <button class="btn primary" onclick="openAddVideoModal()">+ Add Manually</button>
     </div>
-    ${sorted.length===0?`<div class="empty-state"><div class="empty-icon">🎬</div><div class="empty-text">No videos yet</div><div style="font-size:13px">Go to Channels and click "Fetch Latest Videos"</div></div>`
+    ${sorted.length===0?`<div class="empty-state"><div class="empty-icon">🎬</div><div class="empty-text">No videos yet</div></div>`
     :`<div class="table-wrap"><table>
-      <thead><tr><th>Title</th><th>Channel</th><th>Views</th><th>Age</th><th>vs Avg</th><th>Score</th><th>Flag</th><th></th></tr></thead>
+      <thead><tr><th>Title</th><th>Channel</th><th>Views</th><th>Age</th><th>Spike</th><th>Score</th><th>Flag</th><th>Cluster</th><th></th></tr></thead>
       <tbody>${sorted.map(v=>{
-        const ch=state.channels.find(c=>c.id===v.channelId);
-        const ratio=((v.views/(ch?ch.avgViews:50000))).toFixed(1);
+        const sb=v.scoreBreakdown||{};
         const fb=getFlag(v.flag);
-        const sc=v.score>=70?'#7ecf5a':v.score>=45?'#f0a040':'#e05555';
+        const sc=v.score>=70?'var(--green)':v.score>=45?'var(--amber)':'var(--red)';
+        const cl=CLUSTERS.find(c=>c.id===getCluster(v.title));
         return `<tr>
-          <td style="max-width:280px"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px" title="${esc(v.title)}">${esc(v.title)}</div></td>
+          <td style="max-width:260px"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px" title="${esc(v.title)}">${esc(v.title)}</div></td>
           <td style="font-size:12px;color:var(--text2);white-space:nowrap">${esc(v.channelName)}</td>
           <td>${fmtNum(v.views)}</td>
           <td style="white-space:nowrap">${videoAge(v.uploadDate)}</td>
-          <td><span style="font-weight:700;color:${parseFloat(ratio)>=3?'#7ecf5a':parseFloat(ratio)>=1.5?'#f0a040':'var(--text2)'}">${ratio}×</span></td>
+          <td><span style="font-weight:700;color:${(sb.spikeScore||0)>=5?'var(--green)':(sb.spikeScore||0)>=2?'var(--amber)':'var(--text3)'}">${sb.spikeScore||0}×</span></td>
           <td><span style="font-weight:700;color:${sc}">${v.score}</span></td>
           <td><span class="badge ${fb.cls}" style="font-size:10px">${fb.icon} ${v.flag}</span></td>
-          <td><button class="btn primary" style="font-size:11px;padding:4px 10px;white-space:nowrap" onclick="openVideoModal('${v.id}')">🤖 Analyse</button></td>
+          <td style="font-size:11px;color:var(--text3)">${cl?.name?.substring(2,20)||'—'}</td>
+          <td><button class="btn primary" style="font-size:11px;padding:4px 8px;white-space:nowrap" onclick="openVideoModal('${v.id}')">🤖</button></td>
         </tr>`;
       }).join('')}</tbody>
     </table></div>`}`;
 }
 
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
 function renderSettings(c){
+  const s=state.settings;
   c.innerHTML=`
-    <div class="grid-2" style="align-items:start">
+    <div class="grid-2" style="align-items:start;gap:16px">
       <div>
-        <div class="card" style="margin-bottom:16px">
-          <div style="font-weight:700;margin-bottom:14px;font-size:15px">API Keys</div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-weight:700;margin-bottom:12px;font-size:15px">API Keys</div>
           <div class="form-row">
-            <label class="form-label">Claude API Key <span style="font-weight:400;color:var(--text3)">(for AI analysis)</span></label>
-            <input class="input" id="s-claude" type="password" placeholder="sk-ant-api03-..." value="${esc(state.settings.claudeApiKey||'')}">
-            <div style="font-size:11px;color:var(--text3);margin-top:4px">Get yours at console.anthropic.com</div>
+            <label class="form-label">Claude API Key</label>
+            <input class="input" id="s-claude" type="password" placeholder="sk-ant-api03-..." value="${esc(s.claudeApiKey||'')}">
+            <div style="font-size:11px;color:var(--text3);margin-top:3px">console.anthropic.com</div>
           </div>
           <div class="form-row">
-            <label class="form-label">YouTube Data API v3 Key <span style="font-weight:400;color:var(--text3)">(for auto-fetch)</span></label>
-            <input class="input" id="s-yt" type="password" placeholder="AIza..." value="${esc(state.settings.youtubeApiKey||'')}">
-            <div style="font-size:11px;color:var(--text3);margin-top:4px">Get yours at console.cloud.google.com</div>
+            <label class="form-label">YouTube Data API v3 Key</label>
+            <input class="input" id="s-yt" type="password" placeholder="AIza..." value="${esc(s.youtubeApiKey||'')}">
+            <div style="font-size:11px;color:var(--text3);margin-top:3px">console.cloud.google.com</div>
           </div>
-          <button class="btn primary" onclick="saveSettings()">💾 Save keys</button>
+          <button class="btn primary" onclick="saveSettings()">💾 Save Keys</button>
         </div>
         <div class="card">
-          <div style="font-weight:700;margin-bottom:10px">Data</div>
-          <div class="settings-row"><div><div style="font-weight:600">Last refresh</div><div style="font-size:12px;color:var(--text3)">${state.settings.lastRefresh?new Date(state.settings.lastRefresh).toLocaleString():'Never'}</div></div><button class="btn" onclick="rescoreAll()">Re-score now</button></div>
-          <div class="settings-row"><div><div style="font-weight:600">Videos tracked</div><div style="font-size:12px;color:var(--text3)">${state.videos.length} videos · ${state.channels.length} channels</div></div><button class="btn danger" onclick="if(confirm('Clear all videos?')){state.videos=[];saveState();showPage('settings');notify('Videos cleared','success')}">Clear videos</button></div>
+          <div style="font-weight:700;margin-bottom:12px;font-size:15px">Channel Tracking</div>
+          <div class="form-row">
+            <label class="form-label">Videos Per Channel</label>
+            <select class="input" id="s-vpc">
+              <option value="20" ${s.videosPerChannel==20?'selected':''}>20 videos</option>
+              <option value="50" ${s.videosPerChannel==50||!s.videosPerChannel?'selected':''}>50 videos (default)</option>
+              <option value="100" ${s.videosPerChannel==100?'selected':''}>100 videos</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <div><div style="font-weight:600;color:var(--text)">Last refresh</div><div style="font-size:12px;color:var(--text3)">${s.lastRefresh?new Date(s.lastRefresh).toLocaleString():'Never'}</div></div>
+            <button class="btn" onclick="rescoreAll()">Re-score now</button>
+          </div>
+          <div class="settings-row">
+            <div><div style="font-weight:600;color:var(--text)">Total data</div><div style="font-size:12px;color:var(--text3)">${state.videos.length} videos · ${state.channels.length} channels</div></div>
+            <button class="btn danger" onclick="if(confirm('Clear all videos?')){state.videos=[];saveState();showPage('settings');notify('Videos cleared','success')}">Clear videos</button>
+          </div>
         </div>
       </div>
       <div>
-        <div class="card" style="margin-bottom:16px">
-          <div style="font-weight:700;margin-bottom:12px">Opportunity score weights</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:5px 16px;font-size:13px">
-            <span style="color:var(--text2)">Views vs channel average</span><span style="font-weight:700">25%</span>
-            <span style="color:var(--text2)">View velocity</span><span style="font-weight:700">20%</span>
-            <span style="color:var(--text2)">Topic relevance</span><span style="font-weight:700">20%</span>
-            <span style="color:var(--text2)">Upload recency</span><span style="font-weight:700">15%</span>
-            <span style="color:var(--text2)">Title hook strength</span><span style="font-weight:700">15%</span>
-            <span style="color:var(--text2)">VPN CTA potential</span><span style="font-weight:700">5%</span>
-          </div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-weight:700;margin-bottom:12px;font-size:15px">Scoring Weights</div>
+          ${[
+            ['spikeThreshold','Spike threshold for MAKE NOW','2','number'],
+            ['opportunityThreshold','Min score for opportunities','60','number'],
+            ['freshnessWeight','Freshness weight %','15','number'],
+            ['trendWeight','Velocity/trend weight %','20','number'],
+            ['tdukFormulaWeight','TDUK formula weight %','25','number'],
+            ['policyRiskWeight','Policy risk weight %','15','number'],
+          ].map(([id,label,def,type])=>`<div class="form-row">
+            <label class="form-label">${label}</label>
+            <input class="input" id="s-${id}" type="${type}" value="${s[id]||def}" style="width:100%">
+          </div>`).join('')}
+          <button class="btn primary" onclick="saveSettings()">💾 Save Scoring Settings</button>
         </div>
         <div class="card">
-          <div style="font-weight:700;margin-bottom:12px">Policy risk guide</div>
-          <div style="font-size:13px;line-height:2.2">
-            <div><span class="badge low-risk" style="margin-right:8px">Low risk</span>Settings, official updates, VPN education, privacy</div>
-            <div style="margin-top:4px"><span class="badge med-risk" style="margin-right:8px">Med risk</span>Kodi news, Downloader codes, APK guides</div>
+          <div style="font-weight:700;margin-bottom:10px;font-size:15px">Policy Risk Guide</div>
+          <div style="font-size:13px;line-height:2.1">
+            <div><span class="badge low-risk" style="margin-right:8px">Low risk</span>Settings, updates, VPN education, privacy</div>
+            <div style="margin-top:4px"><span class="badge med-risk" style="margin-right:8px">Med risk</span>Kodi, Downloader codes, APK guides</div>
             <div style="margin-top:4px"><span class="badge high-risk" style="margin-right:8px">High risk</span>Piracy, illegal streaming, bypass methods</div>
           </div>
         </div>
@@ -507,48 +726,87 @@ function renderSettings(c){
     </div>`;
 }
 
+window.saveSettings=function(){
+  state.settings.claudeApiKey=document.getElementById('s-claude').value.trim();
+  state.settings.youtubeApiKey=document.getElementById('s-yt').value.trim();
+  state.settings.videosPerChannel=parseInt(document.getElementById('s-vpc').value)||50;
+  ['spikeThreshold','opportunityThreshold','freshnessWeight','trendWeight','tdukFormulaWeight','policyRiskWeight'].forEach(k=>{
+    const el=document.getElementById('s-'+k); if(el) state.settings[k]=parseFloat(el.value)||0;
+  });
+  saveState(); notify('Settings saved','success');
+};
+
 // ── YOUTUBE FETCH ─────────────────────────────────────────────────────────────
-window.fetchChannelVideos = async function(channelId){
-  if(!state.settings.youtubeApiKey){ notify('Add your YouTube API key in Settings first','error'); return; }
-  const ch=state.channels.find(c=>c.id===channelId);
-  if(!ch) return;
+async function fetchChannelVideos(channelId){
+  if(!state.settings.youtubeApiKey){ notify('Add YouTube API key in Settings first','error'); return; }
+  const ch=state.channels.find(c=>c.id===channelId); if(!ch) return;
   const btn=document.getElementById('fetch-btn-'+channelId);
   if(btn){ btn.disabled=true; btn.textContent='⏳ Fetching...'; }
   try {
     const resp=await fetch('/.netlify/functions/youtube',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'fetchVideos',channelId:ch.youtubeChannelId||channelId,apiKey:state.settings.youtubeApiKey})
+      body:JSON.stringify({action:'fetchVideos',channelId:ch.youtubeChannelId,apiKey:state.settings.youtubeApiKey,maxResults:state.settings.videosPerChannel||50})
     });
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error||'Fetch failed');
     const newVideos=data.videos||[];
-    let added=0, updated=0;
-    // Calculate channel average from fetched videos
+    let added=0,updated=0;
     if(newVideos.length>0){
       const avgViews=Math.round(newVideos.reduce((s,v)=>s+v.views,0)/newVideos.length);
       state.channels=state.channels.map(c=>c.id===channelId?{...c,avgViews}:c);
     }
     newVideos.forEach(v=>{
       const existing=state.videos.find(x=>x.youtubeId===v.youtubeId);
-      const scored=scoreVideo(v,ch);
-      if(existing){
-        state.videos=state.videos.map(x=>x.youtubeId===v.youtubeId?{...x,...v,...scored}:x);
-        updated++;
-      } else {
-        state.videos.push({id:'v'+Date.now()+Math.random(),channelId,channelName:ch.name,transcript:'',analysis:null,...v,...scored});
-        added++;
-      }
+      const scored={...scoreVideo(v,ch),cluster:getCluster(v.title)};
+      if(existing){ state.videos=state.videos.map(x=>x.youtubeId===v.youtubeId?{...x,...v,...scored}:x); updated++; }
+      else { state.videos.push({id:'v'+Date.now()+Math.random(),channelId,channelName:ch.name,transcript:'',analysis:null,...v,...scored}); added++; }
     });
     state.settings.lastRefresh=new Date().toISOString();
     saveState();
-    notify(`✅ Fetched ${newVideos.length} videos — ${added} new, ${updated} updated`,'success');
-    showPage('channels');
+    notify(`✅ ${ch.name}: ${added} new, ${updated} updated`,'success');
+    showPage(document.querySelector('.nav-item.active')?.id?.replace('nav-','')||'channels');
   } catch(e){
     notify('Fetch failed: '+e.message,'error');
-    if(btn){ btn.disabled=false; btn.textContent='⬇️ Fetch Latest Videos'; }
+    if(btn){ btn.disabled=false; btn.textContent='⬇️ Fetch Videos'; }
   }
-};
+}
+
+async function fetchAllChannels(){
+  if(!state.settings.youtubeApiKey){ notify('Add YouTube API key in Settings first','error'); return; }
+  if(!state.channels.length){ notify('No channels added yet','error'); return; }
+  const btn=document.getElementById('fetch-all-btn');
+  btn.disabled=true;
+  let totalAdded=0,totalUpdated=0,failed=[];
+  for(let i=0;i<state.channels.length;i++){
+    const ch=state.channels[i];
+    btn.textContent=`⏳ ${i+1}/${state.channels.length}: ${ch.name}`;
+    try {
+      const resp=await fetch('/.netlify/functions/youtube',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'fetchVideos',channelId:ch.youtubeChannelId,apiKey:state.settings.youtubeApiKey,maxResults:state.settings.videosPerChannel||50})
+      });
+      const data=await resp.json();
+      if(!resp.ok) throw new Error(data.error);
+      const newVideos=data.videos||[];
+      if(newVideos.length>0){
+        const avgViews=Math.round(newVideos.reduce((s,v)=>s+v.views,0)/newVideos.length);
+        state.channels=state.channels.map(c=>c.id===ch.id?{...c,avgViews}:c);
+      }
+      newVideos.forEach(v=>{
+        const existing=state.videos.find(x=>x.youtubeId===v.youtubeId);
+        const scored={...scoreVideo(v,ch),cluster:getCluster(v.title)};
+        if(existing){ state.videos=state.videos.map(x=>x.youtubeId===v.youtubeId?{...x,...v,...scored}:x); totalUpdated++; }
+        else { state.videos.push({id:'v'+Date.now()+Math.random(),channelId:ch.id,channelName:ch.name,transcript:'',analysis:null,...v,...scored}); totalAdded++; }
+      });
+    } catch(e){ failed.push(ch.name); }
+  }
+  state.settings.lastRefresh=new Date().toISOString();
+  saveState(); updateRefreshLabel();
+  btn.disabled=false; btn.textContent='⬇️ Fetch All';
+  notify(`✅ Done — ${totalAdded} new, ${totalUpdated} updated${failed.length?' · Failed: '+failed.join(', '):''}`, 'success');
+  showPage(document.querySelector('.nav-item.active')?.id?.replace('nav-','')||'dashboard');
+}
 
 // ── MODALS ────────────────────────────────────────────────────────────────────
 function closeModal(){ document.getElementById('modal-container').innerHTML=''; }
@@ -559,37 +817,22 @@ function openAddChannelModal(existingId){
   openModal(`<div class="modal">
     <div class="modal-head"><h3>${ch?'Edit channel':'Add competitor channel'}</h3><button class="btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="banner info" style="margin-bottom:16px">📡 Best way: paste the channel URL then click Auto-lookup. If that fails, fill in manually — you MUST get the Channel ID from YouTube for video fetching to work.</div>
-      <div class="form-row">
-        <label class="form-label">YouTube URL or @handle</label>
-        <input class="input" id="ch-url" placeholder="https://youtube.com/@UpgradeGuyTech" value="${ch?esc(ch.url):''}">
-      </div>
-      <div class="form-row">
-        <label class="form-label">Channel name</label>
-        <input class="input" id="ch-name" placeholder="e.g. Upgrade Guy Tech" value="${ch?esc(ch.name):''}">
-      </div>
+      <div class="banner info" style="margin-bottom:14px">📡 Paste the YouTube @handle or URL then click Auto-lookup. If it fails, paste the UC... Channel ID manually.</div>
+      <div class="form-row"><label class="form-label">YouTube URL or @handle</label><input class="input" id="ch-url" placeholder="https://youtube.com/@UpgradeGuyTech" value="${ch?esc(ch.url):''}"></div>
+      <div class="form-row"><label class="form-label">Channel name</label><input class="input" id="ch-name" placeholder="e.g. Upgrade Guy Tech" value="${ch?esc(ch.name):''}"></div>
       <div class="form-row">
         <label class="form-label">Channel ID <span style="font-weight:400;color:var(--text3)">— required for video fetching</span></label>
         <input class="input" id="ch-ytid" placeholder="UCxxxxxxxxxxxxxxxxxxxxxxxxx" value="${ch?esc(ch.youtubeChannelId||''):''}">
-        <div style="font-size:11px;color:var(--text3);margin-top:4px">
-          To find: go to the YouTube channel → right-click page → View Source → Ctrl+F → search for <strong>"externalId"</strong> → copy the UC... value
-          <br>Or use <a href="https://commentpicker.com/youtube-channel-id.php" target="_blank" style="color:#7ecf5a">commentpicker.com/youtube-channel-id.php</a>
-        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">Use <a href="https://commentpicker.com/youtube-channel-id.php" target="_blank" style="color:var(--green)">commentpicker.com/youtube-channel-id.php</a> to find any channel's UC... ID</div>
       </div>
       <div class="grid-2">
-        <div class="form-row">
-          <label class="form-label">Subscribers (approx)</label>
-          <input class="input" id="ch-subs" type="number" placeholder="1800000" value="${ch?ch.subscribers:''}">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Avg views per video</label>
-          <input class="input" id="ch-avg" type="number" placeholder="50000" value="${ch?ch.avgViews:''}">
-        </div>
+        <div class="form-row"><label class="form-label">Subscribers (approx)</label><input class="input" id="ch-subs" type="number" placeholder="1800000" value="${ch?ch.subscribers:''}"></div>
+        <div class="form-row"><label class="form-label">Avg views per video</label><input class="input" id="ch-avg" type="number" placeholder="50000" value="${ch?ch.avgViews:''}"></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Cancel</button>
-      ${state.settings.youtubeApiKey?`<button class="btn" onclick="lookupChannel()">🔍 Auto-lookup</button>`:''}
+      ${state.settings.youtubeApiKey?`<button class="btn" onclick="lookupChannel(this)">🔍 Auto-lookup</button>`:''}
       <button class="btn primary" onclick="saveChannel('${existingId||''}')">Save channel</button>
     </div>
   </div>`);
@@ -602,55 +845,34 @@ window.deleteChannel=function(id){
   state.videos=state.videos.filter(v=>v.channelId!==id);
   saveState(); showPage('channels'); notify('Channel removed','success');
 };
-
-window.lookupChannel=async function(){
+window.lookupChannel=async function(btn){
   const url=document.getElementById('ch-url').value.trim();
   if(!url){ notify('Enter a URL or @handle first','error'); return; }
-  const btn=event.target; btn.disabled=true; btn.textContent='🔍 Looking up...';
+  btn.disabled=true; btn.textContent='🔍 Looking up...';
   try {
-    const resp=await fetch('/.netlify/functions/youtube',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'resolveChannel',channelId:url,apiKey:state.settings.youtubeApiKey})
-    });
+    const resp=await fetch('/.netlify/functions/youtube',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'resolveChannel',channelId:url,apiKey:state.settings.youtubeApiKey})});
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error);
     document.getElementById('ch-name').value=data.name||'';
     document.getElementById('ch-subs').value=data.subscribers||'';
     document.getElementById('ch-ytid').value=data.channelId||'';
     document.getElementById('ch-url')._resolvedId=data.channelId;
-    notify('Found: '+data.name+' ('+data.channelId+')','success');
-  } catch(e){
-    notify('Auto-lookup failed: '+e.message+'. Please paste the Channel ID manually.','error');
-  } finally {
-    btn.disabled=false; btn.textContent='🔍 Auto-lookup';
-  }
+    notify('Found: '+data.name,'success');
+  } catch(e){ notify('Lookup failed: '+e.message+'. Paste Channel ID manually.','error'); }
+  finally{ btn.disabled=false; btn.textContent='🔍 Auto-lookup'; }
 };
-
 window.saveChannel=function(existingId){
   const url=document.getElementById('ch-url').value.trim();
   const name=document.getElementById('ch-name').value.trim();
   const subscribers=parseInt(document.getElementById('ch-subs').value)||0;
   const avgViews=parseInt(document.getElementById('ch-avg').value)||50000;
-  const urlEl=document.getElementById('ch-url');
-  // Get channel ID: manual input takes priority, then auto-resolved
   const manualId=document.getElementById('ch-ytid')?.value.trim()||'';
-  const youtubeChannelId=manualId||urlEl._resolvedId||'';
+  const youtubeChannelId=manualId||document.getElementById('ch-url')._resolvedId||'';
   if(!name){ notify('Channel name is required','error'); return; }
-  if(!youtubeChannelId){ notify('Channel ID is required for video fetching. Use the Auto-lookup button or paste the UC... ID manually.','error'); return; }
-  if(existingId){
-    state.channels=state.channels.map(c=>c.id===existingId?{...c,name,url,subscribers,avgViews,youtubeChannelId}:c);
-    notify('Channel updated','success');
-  } else {
-    state.channels.push({id:'ch'+Date.now(),name,url:url||'https://youtube.com',subscribers,avgViews,youtubeChannelId,status:'active'});
-    notify('Channel added! Now click Fetch Latest Videos.','success');
-  }
+  if(!youtubeChannelId){ notify('Channel ID is required. Use Auto-lookup or paste the UC... ID manually.','error'); return; }
+  if(existingId){ state.channels=state.channels.map(c=>c.id===existingId?{...c,name,url,subscribers,avgViews,youtubeChannelId}:c); notify('Channel updated','success'); }
+  else { state.channels.push({id:'ch'+Date.now(),name,url:url||'https://youtube.com',subscribers,avgViews,youtubeChannelId,status:'active',thumbnail:null}); notify('Channel added! Now click Fetch Videos.','success'); }
   saveState(); closeModal(); showPage('channels');
-};
-window.saveSettings=function(){
-  state.settings.claudeApiKey=document.getElementById('s-claude').value.trim();
-  state.settings.youtubeApiKey=document.getElementById('s-yt').value.trim();
-  saveState(); notify('Settings saved','success');
 };
 
 function openAddVideoModal(){
@@ -667,7 +889,7 @@ function openAddVideoModal(){
       </div>
       <div class="form-row"><label class="form-label">Description (optional)</label><textarea class="textarea" id="vm-desc" rows="3"></textarea></div>
     </div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveManualVideo()">Add & score</button></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveManualVideo()">Add & Score</button></div>
   </div>`);
 }
 window.openAddVideoModal=openAddVideoModal;
@@ -681,50 +903,49 @@ window.saveManualVideo=function(){
   if(!title||!url){ notify('Title and URL are required','error'); return; }
   const ch=state.channels.find(c=>c.id===channelId);
   const base={id:'v'+Date.now(),channelId,channelName:ch?.name||'Unknown',title,url,views,uploadDate:new Date(uploadDate).toISOString(),description,thumbnail:'',transcript:'',analysis:null};
-  const scored=scoreVideo(base,ch);
+  const scored={...scoreVideo(base,ch),cluster:getCluster(title)};
   state.videos.push({...base,...scored});
   saveState(); closeModal(); showPage('videos'); notify('Video added and scored','success');
 };
 
+// ── VIDEO ANALYSIS MODAL ──────────────────────────────────────────────────────
 function openVideoModal(videoId){
-  const v=state.videos.find(x=>x.id===videoId);
-  if(!v) return;
+  const v=state.videos.find(x=>x.id===videoId); if(!v) return;
   const ch=state.channels.find(c=>c.id===v.channelId);
-  const ratio=((v.views/(ch?ch.avgViews:50000))).toFixed(1);
-  const fb=getFlag(v.flag);
-  const pr=getPolicyRisk(v.scoreBreakdown?.policyRisk||0);
   const sb=v.scoreBreakdown||{};
+  const fb=getFlag(v.flag);
+  const pr=getPR(sb.policyRisk||0);
   const analysisHtml=v.analysis?renderAnalysisResult(v.analysis,videoId):`<div style="text-align:center;padding:30px 20px">
-    <div style="font-size:36px;margin-bottom:12px">🤖</div>
-    <div style="font-size:14px;font-weight:700;margin-bottom:6px">Generate TDUK Content Brief</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;max-width:380px;margin-left:auto;margin-right:auto">Get hook analysis, 5 title ideas, thumbnail text, VPN CTA angle, and a full script outline — all tailored for TDUK.</div>
+    <div style="font-size:36px;margin-bottom:10px">🤖</div>
+    <div style="font-weight:700;margin-bottom:6px;color:var(--text)">Generate TDUK Content Brief</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;max-width:380px;margin:0 auto 16px">Hooks, title ideas, thumbnail text, VPN angle, risk assessment, fit score, and script outline — all original TDUK content.</div>
     <button class="btn primary" style="font-size:13px;padding:8px 20px" onclick="runAiAnalysis('${videoId}')">🚀 Generate TDUK Analysis</button>
   </div>`;
-  openModal(`<div class="modal" style="max-width:820px">
-    <div class="modal-head"><h3>Video analysis</h3><button class="btn" onclick="closeModal()">✕</button></div>
+  openModal(`<div class="modal" style="max-width:860px">
+    <div class="modal-head"><h3>Video Analysis</h3><button class="btn" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap">
+      <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap">
         <div style="flex:1;min-width:0">
-          <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:#ffffff;line-height:1.4">${esc(v.title)}</div>
-          <div style="font-size:12px;color:#aaa;margin-bottom:8px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)} · 📈 ${ratio}× avg</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span><span class="badge ${pr.cls}">${pr.label}</span><span style="font-size:12px;color:var(--text3);align-self:center">Score: <strong>${v.score}/100</strong></span></div>
+          <div style="font-weight:700;font-size:15px;margin-bottom:5px;color:#fff">${esc(v.title)}</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:7px">📡 ${esc(v.channelName)} · 👁 ${fmtNum(v.views)} · 🕐 ${videoAge(v.uploadDate)}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge ${fb.cls}">${fb.icon} ${v.flag}</span><span class="badge ${pr.cls}">${pr.label}</span><span style="font-size:12px;color:var(--text3);align-self:center">Score: <strong style="color:var(--green)">${v.score}</strong>/100</span></div>
         </div>
         <a href="${esc(v.url)}" target="_blank" class="btn" style="font-size:12px">▶ Watch original</a>
       </div>
       <div class="divider"></div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:16px">
-        ${[['vs avg',ratio+'×'],['Views/day',fmtNum(sb.velocity||0)],['Recency',(sb.recency||0)+'/100'],['Relevance',(sb.relevance||0)+'/100'],['Title hook',(sb.titleStrength||0)+'/100'],['VPN pot.',(sb.vpnPotential||0)+'/100'],['Policy risk',(sb.policyRisk||0)+'/100']].map(([l,val])=>`<div class="metric-card" style="padding:10px 12px"><div class="metric-label" style="color:#888;font-size:11px;margin-bottom:4px">${l}</div><div style="font-size:15px;font-weight:700;color:#7ecf5a">${val}</div></div>`).join('')}
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:7px;margin-bottom:14px">
+        ${[['Spike Score',(sb.spikeScore||0)+'×'],['Momentum',(sb.momentumScore||0)+'×'],['Views/hr',fmtNum(sb.velocity||0)],['Freshness',(sb.freshnessScore||0)+'/100'],['Relevance',(sb.relevance||0)+'/100'],['VPN Pot.',(sb.vpnPotential||0)+'/100'],['Policy risk',(sb.policyRisk||0)+'/100'],['TDUK boost',(sb.tdukBoost||0)]].map(([l,val])=>`<div class="metric-card" style="padding:9px 10px"><div class="metric-label">${l}</div><div style="font-size:14px;font-weight:700;color:var(--green)">${val}</div></div>`).join('')}
       </div>
       <div class="divider"></div>
-      <div style="margin-bottom:16px">
-        <div style="font-weight:700;margin-bottom:8px;font-size:13px">📝 Transcript <span style="font-size:11px;color:var(--text3);font-weight:400">(optional — improves analysis quality)</span></div>
-        <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-          <button class="btn success" style="font-size:12px;padding:5px 12px" id="fetch-transcript-btn-${v.id}" onclick="fetchTranscript('${v.id}','${esc(v.url)}')">⬇️ Auto-fetch Transcript</button>
+      <div style="margin-bottom:14px">
+        <div style="font-weight:700;margin-bottom:7px;font-size:13px;color:var(--text)">📝 Transcript <span style="font-size:11px;color:var(--text3);font-weight:400">(optional — improves analysis quality)</span></div>
+        <div style="display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap">
+          <button class="btn success" style="font-size:12px;padding:5px 11px" id="fetch-transcript-btn-${v.id}" onclick="fetchTranscript('${v.id}','${esc(v.url)}')">⬇️ Auto-fetch Transcript</button>
           <span style="font-size:12px;color:var(--text3);align-self:center">or paste manually below</span>
         </div>
-        <div id="transcript-status-${v.id}" style="font-size:12px;color:var(--text3);margin-bottom:6px"></div>
-        <textarea class="textarea" rows="3" id="ta-${v.id}" style="font-size:12px" placeholder="Paste transcript here, or click Auto-fetch above...">${esc(v.transcript||'')}</textarea>
-        <button class="btn" style="margin-top:6px;font-size:12px" onclick="saveTranscript('${v.id}')">💾 Save transcript</button>
+        <div id="transcript-status-${v.id}" style="font-size:12px;margin-bottom:5px"></div>
+        <textarea class="textarea" rows="3" id="ta-${v.id}" style="font-size:12px" placeholder="Paste transcript here, or click Auto-fetch...">${esc(v.transcript||'')}</textarea>
+        <button class="btn" style="margin-top:5px;font-size:12px" onclick="saveTranscript('${v.id}')">💾 Save transcript</button>
       </div>
       <div class="divider"></div>
       <div id="analysis-area-${v.id}">${analysisHtml}</div>
@@ -733,35 +954,27 @@ function openVideoModal(videoId){
 }
 window.openVideoModal=openVideoModal;
 
-window.fetchTranscript=async function(videoId, videoUrl){
+window.fetchTranscript=async function(videoId,videoUrl){
   const btn=document.getElementById('fetch-transcript-btn-'+videoId);
   const status=document.getElementById('transcript-status-'+videoId);
   const ta=document.getElementById('ta-'+videoId);
-  if(btn){ btn.disabled=true; btn.textContent='⏳ Fetching...'; }
-  if(status) status.textContent='Fetching transcript from YouTube...';
+  if(btn){btn.disabled=true;btn.textContent='⏳ Fetching...';}
+  if(status) status.textContent='Fetching transcript...';
   try {
-    const resp=await fetch('/.netlify/functions/transcript',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({videoUrl})
-    });
+    const resp=await fetch('/.netlify/functions/transcript',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({videoUrl})});
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error||'Fetch failed');
     if(data.transcript){
       if(ta) ta.value=data.transcript;
-      // Auto-save it
       state.videos=state.videos.map(v=>v.id===videoId?{...v,transcript:data.transcript}:v);
       saveState();
-      if(status) status.innerHTML='<span style="color:#7ecf5a">✅ Transcript fetched and saved — '+data.transcript.split(' ').length+' words</span>';
-      if(btn){ btn.textContent='✅ Fetched'; }
-      notify('Transcript fetched successfully','success');
-    } else {
-      throw new Error('No transcript available for this video');
-    }
+      if(status) status.innerHTML=`<span style="color:var(--green)">✅ Fetched — ${data.transcript.split(' ').length} words</span>`;
+      if(btn){btn.textContent='✅ Fetched';}
+      notify('Transcript fetched','success');
+    } else throw new Error('No transcript found');
   } catch(e){
-    if(status) status.innerHTML='<span style="color:#e05555">⚠️ '+esc(e.message)+'</span>';
-    if(btn){ btn.disabled=false; btn.textContent='⬇️ Auto-fetch Transcript'; }
-    notify('Transcript fetch failed: '+e.message,'error');
+    if(status) status.innerHTML=`<span style="color:var(--red)">⚠️ ${esc(e.message)}</span>`;
+    if(btn){btn.disabled=false;btn.textContent='⬇️ Auto-fetch Transcript';}
   }
 };
 
@@ -773,299 +986,149 @@ window.saveTranscript=function(videoId){
 
 window.runAiAnalysis=async function(videoId){
   const v=state.videos.find(x=>x.id===videoId); if(!v) return;
-  if(!state.settings.claudeApiKey){ notify('Add your Claude API key in Settings first','error'); closeModal(); showPage('settings'); return; }
+  if(!state.settings.claudeApiKey){ notify('Add Claude API key in Settings first','error'); closeModal(); showPage('settings'); return; }
   const aa=document.getElementById('analysis-area-'+videoId);
-
-  const showStatus=(msg,pct)=>{
-    if(!aa) return;
-    aa.innerHTML=`<div style="text-align:center;padding:40px 20px">
-      <div style="font-size:36px;margin-bottom:12px">🤖</div>
-      <div style="font-size:14px;font-weight:700;margin-bottom:10px">${msg}</div>
-      <div style="max-width:240px;margin:0 auto;background:var(--bg2);border-radius:4px;height:6px;overflow:hidden">
-        <div style="height:100%;background:#7ecf5a;border-radius:4px;width:${pct}%;transition:width .5s"></div>
-      </div>
-    </div>`;
-  };
-
+  const showStatus=(msg,pct)=>{ if(aa) aa.innerHTML=`<div style="text-align:center;padding:36px 20px"><div style="font-size:32px;margin-bottom:10px">🤖</div><div style="font-weight:700;color:var(--text);margin-bottom:8px">${msg}</div><div style="max-width:220px;margin:0 auto;background:var(--bg2);border-radius:4px;height:5px;overflow:hidden"><div style="height:100%;background:var(--green);border-radius:4px;width:${pct}%;transition:width .4s"></div></div></div>`; };
   const ch=state.channels.find(c=>c.id===v.channelId);
-  const avg=ch?ch.avgViews:50000;
-  const ratio=((v.views/avg)).toFixed(1);
-  const ctx=`Video: "${v.title}" by ${v.channelName}. Views: ${fmtNum(v.views)} (${ratio}x their average of ${fmtNum(avg)}). Age: ${videoAge(v.uploadDate)}.${v.description?' Description: '+v.description.substring(0,250):''}.${v.transcript?' Transcript: '+v.transcript.substring(0,500):''}`;
-
-  async function callAI(systemMsg, userMsg, maxTokens){
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':state.settings.claudeApiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:maxTokens,
-        system:systemMsg,
-        messages:[{role:'user',content:userMsg}]
-      })
-    });
-    const d=await r.json();
-    if(!r.ok) throw new Error(d.error?.message||'API error '+r.status);
+  const avg=v.scoreBreakdown?.avg20||(ch?.avgViews||50000);
+  const spike=v.scoreBreakdown?.spikeScore||0;
+  const ctx=`Video: "${v.title}" by ${v.channelName}. Views: ${fmtNum(v.views)} (spike: ${spike}× their avg of ${fmtNum(avg)}). Age: ${videoAge(v.uploadDate)}.${v.description?' Desc: '+v.description.substring(0,250):''}.${v.transcript?' Transcript: '+v.transcript.substring(0,600):''}`;
+  async function callAI(sys,usr,tok){
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':state.settings.claudeApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:tok,system:sys,messages:[{role:'user',content:usr}]})});
+    const d=await r.json(); if(!r.ok) throw new Error(d.error?.message||'API error '+r.status);
     return d.content?.[0]?.text||'';
   }
-
   try {
-    showStatus('Analysing strategy...', 30);
-    const strategyText = await callAI(
-      'You are a YouTube strategy expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Be concise. No markdown asterisks.',
-      `Analyse this competitor video for TDUK:\n${ctx}\n\nAnswer each in 1-2 sentences:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:`,
-      600
-    );
-
-    showStatus('Generating titles and thumbnails...', 70);
-    const titlesText = await callAI(
-      'You are a YouTube title expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Output only the lists requested.',
-      `Based on this video:\n${ctx}\n\n5 TDUK TITLE IDEAS:\n1.\n2.\n3.\n4.\n5.\n\n5 THUMBNAIL TEXT IDEAS:\n1.\n2.\n3.\n4.\n5.`,
-      300
-    );
-
+    showStatus('Analysing strategy...', 25);
+    const t1=await callAI('You are a YouTube strategy expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Be concise and actionable. No markdown asterisks.',
+      `Analyse this competitor video for TDUK:\n${ctx}\n\nRespond with exactly these headers:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:\nESTIMATED FIT SCORE FOR TDUK:\nCOMMENT QUESTION TO ASK:`,600);
+    showStatus('Generating titles & thumbnails...', 55);
+    const t2=await callAI('YouTube title expert for TDUK (Firestick/VPN channel). Output only the lists. No extra text.',
+      `Based on:\n${ctx}\n\n5 TDUK TITLE IDEAS:\n1.\n2.\n3.\n4.\n5.\n\n5 THUMBNAIL TEXT IDEAS:\n1.\n2.\n3.\n4.\n5.`,280);
+    showStatus('Writing script outline...', 80);
+    const t3=await callAI('YouTube scriptwriter for TDUK (Tech Doctor UK), Firestick/streaming/VPN channel. Write complete, detailed outlines. Every section must have 2-3 sentences of specific detail.',
+      `Write a complete 6-8 min TDUK script outline based on:\n${ctx}\n\nUse this exact format with a summary sentence and 3 bullet points per section:\n\nIntro (0:00-0:45):\nSummary: [opening hook sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 1 (0:45-2:30):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 2 (2:30-4:00):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 3 (4:00-5:30):\nSummary: [what this section covers]\n• [talking point]\n• [talking point]\n• [talking point]\n\nVPN Segment (5:30-6:30):\nSummary: [how to introduce VPN naturally]\n• [talking point]\n• [talking point]\n• [talking point]\n\nOutro (6:30-7:30):\nSummary: [how to close]\n• [talking point]\n• [talking point]\n• [talking point]`,900);
     showStatus('Done!', 100);
-
-    const strategy = parseStrategyText(strategyText);
-    const titles = parseTitlesText(titlesText);
-    // Store context for script generation later
-    const parsed = { ...strategy, ...titles, scriptOutline:'', _ctx:ctx, raw: strategyText+'\n'+titlesText };
-
+    const parsed={...parseStrategyText(t1),...parseTitlesText(t2),...parseScriptText(t3),raw:t1+'\n'+t2+'\n'+t3};
     state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:parsed}:v2);
     saveState();
     if(aa) aa.innerHTML=renderAnalysisResult(parsed,videoId);
-    notify('Analysis complete! Click "Generate Script Outline" when ready.','success');
-
+    notify('Analysis complete!','success');
   } catch(e){
-    if(aa) aa.innerHTML=`<div style="text-align:center;padding:20px"><div style="color:#a32d2d;margin-bottom:12px;font-size:13px">⚠️ ${esc(e.message)}</div><button class="btn primary" onclick="runAiAnalysis('${videoId}')">Try again</button></div>`;
+    if(aa) aa.innerHTML=`<div style="text-align:center;padding:20px"><div style="color:var(--red);margin-bottom:12px;font-size:13px">⚠️ ${esc(e.message)}</div><button class="btn primary" onclick="runAiAnalysis('${videoId}')">Try again</button></div>`;
     notify('Failed: '+e.message,'error');
   }
 };
 
-window.generateScriptOutline=async function(videoId){
-  const v=state.videos.find(x=>x.id===videoId); if(!v||!v.analysis) return;
-  const btn=document.getElementById('script-btn-'+videoId);
-  const area=document.getElementById('script-area-'+videoId);
-  if(btn){ btn.disabled=true; btn.textContent='⏳ Writing script...'; }
-  if(area) area.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Writing your script outline...</div>`;
-
-  const ctx = v.analysis._ctx || `Video: "${v.title}" by ${v.channelName}`;
-
-  try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':state.settings.claudeApiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:1200,
-        system:'You are a YouTube scriptwriter for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Write complete, detailed script outlines. Every section needs 2-3 sentences. Never leave a section empty or incomplete.',
-        messages:[{role:'user',content:`Write a concise 6-8 minute TDUK script outline for a video based on:\n${ctx}\n\nFor each section give:\n- One sentence summarising what to say\n- 3 bullet points of specific talking points\n\nUse EXACTLY this format, no extra text:\n\nIntro (0:00-0:45):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 1 (0:45-2:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 2 (2:30-4:00):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nSection 3 (4:00-5:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nVPN Segment (5:30-6:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]\n\nOutro (6:30-7:30):\nSummary: [one sentence]\n• [talking point]\n• [talking point]\n• [talking point]`}]
-      })
-    });
-    const d=await r.json();
-    if(!r.ok) throw new Error(d.error?.message||'API error '+r.status);
-    const scriptText=d.content?.[0]?.text||'';
-
-    // Parse script sections
-    const labels=['Intro (0:00-0:45)','Section 1 (0:45-2:30)','Section 2 (2:30-4:00)','Section 3 (4:00-5:30)','VPN Segment (5:30-6:30)','Outro (6:30-7:30)'];
-    const sections=[];
-    for(let i=0;i<labels.length;i++){
-      const label=labels[i];
-      const next=labels[i+1];
-      const si=scriptText.indexOf(label+':');
-      if(si===-1) continue;
-      const cs=si+label.length+1;
-      const ei=next?scriptText.indexOf(next+':'):scriptText.length;
-      const raw=scriptText.substring(cs,ei!==-1?ei:scriptText.length).trim();
-      // Split into summary and bullet points
-      const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-      const summary=lines.find(l=>l.startsWith('Summary:'))||'';
-      const bullets=lines.filter(l=>l.startsWith('•')||l.startsWith('-'));
-      sections.push({label,summary:summary.replace('Summary:','').trim(),bullets});
-    }
-
-    const updatedAnalysis={...v.analysis,scriptOutline:sections.map(s=>s.label+': '+s.summary+' '+s.bullets.join(' ')).join('\n')};
-    state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:updatedAnalysis}:v2);
-    saveState();
-
-    if(area){
-      if(sections.length){
-        area.innerHTML=sections.map(s=>`
-          <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border)">
-            <div style="font-size:11px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">${esc(s.label)}</div>
-            ${s.summary?`<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">${esc(s.summary)}</div>`:''}
-            ${s.bullets.length?`<ul style="list-style:none;padding:0;margin:0">${s.bullets.map(b=>`<li style="font-size:12px;color:var(--text2);padding:2px 0 2px 14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:#7ecf5a">•</span>${esc(b.replace(/^[•\-]\s*/,''))}</li>`).join('')}</ul>`:''}
-          </div>`).join('');
-      } else {
-        area.innerHTML=`<div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${esc(scriptText)}</div>`;
-      }
-    }
-    if(btn){ btn.textContent='✅ Script generated'; }
-    notify('Script outline ready!','success');
-
-  } catch(e){
-    if(area) area.innerHTML=`<div style="color:#a32d2d;font-size:13px">⚠️ ${esc(e.message)}</div>`;
-    if(btn){ btn.disabled=false; btn.textContent='📋 Generate Script Outline'; }
-    notify('Script failed: '+e.message,'error');
-  }
-};
-
-
-function extractSection(text, label){
-  const lines = text.split('\n');
-  let result = [], capturing = false;
-  const labelUpper = label.toUpperCase();
-  for(let i=0; i<lines.length; i++){
-    const line = lines[i].trim();
-    const lineUpper = line.toUpperCase();
-    if(lineUpper.startsWith(labelUpper+':')||lineUpper===labelUpper){
-      capturing = true;
-      const rest = line.substring(line.indexOf(':')+1).trim();
-      if(rest) result.push(rest);
-      continue;
-    }
-    if(capturing){
-      // Stop at next section header (all caps line ending with colon)
-      if(/^[A-Z0-9 '\-()\/]{4,}:/.test(line) && line===line.toUpperCase().replace(/[^A-Z0-9 ':'\-()\/]/g,'').padEnd(line.length)){
-        break;
-      }
-      if(line) result.push(line);
-    }
+function extractSection(text,label){
+  const lines=text.split('\n');
+  let result=[],capturing=false;
+  const lu=label.toUpperCase();
+  for(const line of lines){
+    const lt=line.trim(),ltu=lt.toUpperCase();
+    if(ltu.startsWith(lu+':')||ltu===lu){ capturing=true; const r=lt.substring(lt.indexOf(':')+1).trim(); if(r) result.push(r); continue; }
+    if(capturing){ if(/^[A-Z][A-Z0-9 ''\-():\/]{3,}:/.test(lt)) break; if(lt) result.push(lt); }
   }
   return result.map(l=>l.replace(/^[-*\d.]+\s*/,'').trim()).filter(Boolean);
 }
-
 function parseStrategyText(text){
-  const get=(label)=>extractSection(text,label).join(' ');
-  const getList=(label)=>extractSection(text,label);
-  return {
-    whyWorking: get('WHY IT\'S WORKING'),
-    mainHook: get('MAIN HOOK'),
-    emotionalTrigger: get('EMOTIONAL TRIGGER'),
-    retentionHooks: getList('RETENTION HOOKS'),
-    thumbnailStrategy: get('THUMBNAIL STRATEGY'),
-    titleStrategy: get('TITLE STRATEGY'),
-    riskLevel: get('RISK LEVEL FOR TDUK'),
-    tdukAngle: get('BEST TDUK ANGLE'),
-    vpnCta: get('VPN CTA ANGLE')
-  };
+  const get=l=>extractSection(text,l).join(' ');
+  const gl=l=>extractSection(text,l);
+  return {whyWorking:get("WHY IT'S WORKING"),mainHook:get('MAIN HOOK'),emotionalTrigger:get('EMOTIONAL TRIGGER'),retentionHooks:gl('RETENTION HOOKS'),thumbnailStrategy:get('THUMBNAIL STRATEGY'),titleStrategy:get('TITLE STRATEGY'),riskLevel:get('RISK LEVEL FOR TDUK'),tdukAngle:get('BEST TDUK ANGLE'),vpnCta:get('VPN CTA ANGLE'),fitScore:get('ESTIMATED FIT SCORE FOR TDUK'),commentQuestion:get('COMMENT QUESTION TO ASK')};
 }
-
 function parseTitlesText(text){
-  const lines = text.split('\n').map(l=>l.replace(/^[\d.)\-*]+\s*/,'').trim()).filter(Boolean);
-  const titleStart = text.toUpperCase().indexOf('5 TDUK TITLE IDEAS');
-  const thumbStart = text.toUpperCase().indexOf('5 THUMBNAIL TEXT IDEAS');
-  const titleLines=[], thumbLines=[];
+  const titleLines=[],thumbLines=[];
   let mode='';
   for(const line of text.split('\n')){
     const u=line.toUpperCase().trim();
-    if(u.includes('TITLE IDEAS')) { mode='titles'; continue; }
-    if(u.includes('THUMBNAIL TEXT')) { mode='thumbs'; continue; }
+    if(u.includes('TITLE IDEAS')) { mode='t'; continue; }
+    if(u.includes('THUMBNAIL TEXT')) { mode='th'; continue; }
     const clean=line.replace(/^[\d.)\-*]+\s*/,'').trim();
     if(!clean) continue;
-    if(mode==='titles' && titleLines.length<5) titleLines.push(clean);
-    if(mode==='thumbs' && thumbLines.length<5) thumbLines.push(clean);
+    if(mode==='t'&&titleLines.length<5) titleLines.push(clean);
+    if(mode==='th'&&thumbLines.length<5) thumbLines.push(clean);
   }
-  return { titleIdeas: titleLines, thumbnailTexts: thumbLines };
+  return {titleIdeas:titleLines,thumbnailTexts:thumbLines};
 }
-
 function parseScriptText(text){
-  // Extract the whole script outline as structured sections
-  const sections = [];
-  const labels = ['Intro (0:00-0:45)','Section 1 (0:45-2:30)','Section 2 (2:30-4:00)','Section 3 (4:00-5:30)','VPN Segment (5:30-6:30)','Outro (6:30-7:30)'];
-  for(let i=0; i<labels.length; i++){
-    const label = labels[i];
-    const nextLabel = labels[i+1];
-    const startIdx = text.indexOf(label+':');
-    if(startIdx === -1) continue;
-    const contentStart = startIdx + label.length + 1;
-    const endIdx = nextLabel ? text.indexOf(nextLabel+':') : text.length;
-    const sectionText = text.substring(contentStart, endIdx !== -1 ? endIdx : text.length).trim();
-    sections.push(label+': '+sectionText);
+  const labels=['Intro (0:00-0:45)','Section 1 (0:45-2:30)','Section 2 (2:30-4:00)','Section 3 (4:00-5:30)','VPN Segment (5:30-6:30)','Outro (6:30-7:30)'];
+  const sections=[];
+  for(let i=0;i<labels.length;i++){
+    const label=labels[i],next=labels[i+1];
+    const si=text.indexOf(label+':');
+    if(si===-1) continue;
+    const cs=si+label.length+1;
+    const ei=next?text.indexOf(next+':'):text.length;
+    const raw=text.substring(cs,ei!==-1?ei:text.length).trim();
+    const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+    const summary=lines.find(l=>l.toLowerCase().startsWith('summary:'))||'';
+    const bullets=lines.filter(l=>l.startsWith('•')||l.startsWith('-'));
+    sections.push({label,summary:summary.replace(/^summary:/i,'').trim(),bullets:bullets.map(b=>b.replace(/^[•\-]\s*/,'').trim())});
   }
-  return { scriptOutline: sections.join('\n') };
+  return {scriptSections:sections};
 }
 
-function renderAnalysisResult(a, videoId){
+function renderAnalysisResult(a,videoId){
   if(!a) return '';
-  const sec=(lbl,val,icon)=>{
-    const v=val?val.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/^##\s*/gm,'').trim():'';
-    return v?`<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">${icon} ${lbl}</div><div style="font-size:13px;line-height:1.65;color:var(--text)">${esc(v)}</div></div>`:'';
-  };
-  const lst=(lbl,items,icon)=>{
-    const clean=(items||[]).map(i=>i.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').trim()).filter(Boolean);
-    return clean.length?`<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">${icon} ${lbl}</div><ul class="analysis-list">${clean.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:'';
-  };
-  const scriptSection=()=>{
-    const outline=a.scriptOutline||'';
-    if(!outline) return '';
-    const sections=outline.split('\n').filter(Boolean);
-    const rows=sections.map(s=>{
-      const ci=s.indexOf(':');
-      if(ci>0&&ci<45){
-        const label=s.substring(0,ci).trim();
-        const body=s.substring(ci+1).trim();
-        return `<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:700;color:var(--info-text,#185fa5);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">${esc(label)}</div><div style="font-size:13px;line-height:1.65;color:var(--text)">${esc(body)}</div></div>`;
-      }
-      return `<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:6px">${esc(s)}</div>`;
-    }).join('');
-    return `<div class="analysis-section"><div class="analysis-label" style="color:#7ecf5a">📋 TDUK script outline</div>${rows}</div>`;
+  const sec=(lbl,val,icon)=>{ const v=cleanMd(val||''); return v?`<div class="a-sec"><div class="al">${icon} ${lbl}</div><div class="av">${esc(v)}</div></div>`:''; };
+  const lst=(lbl,items,icon)=>{ const cl=(items||[]).map(i=>cleanMd(i)).filter(Boolean); return cl.length?`<div class="a-sec"><div class="al">${icon} ${lbl}</div><ul class="a-list">${cl.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`:''; };
+  const scriptHtml=()=>{
+    if(!a.scriptSections?.length) return '';
+    return `<div class="a-sec"><div class="al">📋 TDUK Script Outline</div>
+      ${a.scriptSections.map(s=>`<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">${esc(s.label)}</div>
+        ${s.summary?`<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px">${esc(s.summary)}</div>`:''}
+        ${s.bullets.length?`<ul style="list-style:none;padding:0;margin:0">${s.bullets.map(b=>`<li style="font-size:12px;color:var(--text2);padding:2px 0 2px 14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:var(--green)">•</span>${esc(b)}</li>`).join('')}</ul>`:''}
+      </div>`).join('')}
+    </div>`;
   };
   return `<div style="border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
     <div style="display:grid;grid-template-columns:1fr 1fr">
-      <div style="padding:16px;border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border)">
-        ${sec("Why it's working",a.whyWorking,'📊')}${sec('Main hook',a.mainHook,'🎣')}${sec('Emotional trigger',a.emotionalTrigger,'💡')}${lst('Retention hooks',a.retentionHooks,'🔄')}
+      <div style="padding:14px;border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border)">
+        ${sec("Why it's working",a.whyWorking,'📊')}${sec('Main hook',a.mainHook,'🎣')}${sec('Emotional trigger',a.emotionalTrigger,'💡')}${lst('Retention hooks',a.retentionHooks,'🔄')}${sec('Comment question',a.commentQuestion,'💬')}
       </div>
-      <div style="padding:16px;border-bottom:0.5px solid var(--border)">
-        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level for TDUK',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}
+      <div style="padding:14px;border-bottom:0.5px solid var(--border)">
+        ${sec('Thumbnail strategy',a.thumbnailStrategy,'🖼️')}${sec('Title strategy',a.titleStrategy,'✍️')}${sec('Risk level',a.riskLevel,'⚠️')}${sec('Best TDUK angle',a.tdukAngle,'🎯')}${sec('VPN CTA angle',a.vpnCta,'🔒')}${a.fitScore?`<div class="a-sec"><div class="al">⚡ Estimated TDUK fit score</div><div style="font-size:22px;font-weight:700;color:var(--green)">${esc(a.fitScore)}</div></div>`:''}
       </div>
-      <div style="padding:16px;border-right:0.5px solid var(--border)">
+      <div style="padding:14px;border-right:0.5px solid var(--border)">
         ${lst('5 TDUK title ideas',a.titleIdeas,'📝')}${lst('5 thumbnail text ideas',a.thumbnailTexts,'🎨')}
       </div>
-      <div style="padding:16px">
-        <div class="analysis-section" style="border-bottom:none">
-          <div class="analysis-label" style="color:#7ecf5a">📋 TDUK script outline</div>
-          ${!a.scriptOutline ? `
-            <div style="text-align:center;padding:20px 0">
-              <div style="font-size:13px;color:var(--text2);margin-bottom:14px">Script outline is generated separately so it gets full detail and never gets cut off.</div>
-              <button class="btn success" id="script-btn-${videoId}" style="font-size:13px;padding:8px 18px" onclick="generateScriptOutline('${videoId}')">📋 Generate Script Outline</button>
-            </div>
-            <div id="script-area-${videoId}"></div>
-          ` : `
-            <div id="script-area-${videoId}">
-              ${(()=>{
-                const sections=a.scriptOutline.split('\n').filter(Boolean);
-                return sections.map(s=>{
-                  const ci=s.indexOf(':');
-                  if(ci>0&&ci<45){
-                    const label=s.substring(0,ci).trim();
-                    const body=s.substring(ci+1).trim();
-                    return '<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)"><div style="font-size:11px;font-weight:700;color:#7ecf5a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">'+esc(label)+'</div><div style="font-size:13px;line-height:1.7;color:var(--text)">'+esc(body)+'</div></div>';
-                  }
-                  return '<div style="font-size:13px;line-height:1.7;color:var(--text);margin-bottom:6px">'+esc(s)+'</div>';
-                }).join('');
-              })()}
-            </div>
-          `}
-        </div>
-      </div>
+      <div style="padding:14px">${scriptHtml()}</div>
     </div>
-    <div style="padding:10px 16px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end">
-      <button class="btn danger" style="font-size:11px;padding:4px 10px" onclick="clearAnalysis('${videoId}')">🗑 Clear & regenerate</button>
+    <div style="padding:9px 14px;border-top:0.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+      ${!a.scriptSections?.length?`<button class="btn success" id="script-btn-${videoId}" onclick="generateScriptOutline('${videoId}')">📋 Generate Script Outline</button>`:''}
+      <button class="btn danger" style="font-size:11px;padding:4px 9px" onclick="clearAnalysis('${videoId}')">🗑 Clear & regenerate</button>
     </div>
   </div>`;
 }
 
-window.clearAnalysis=function(videoId){ state.videos=state.videos.map(v=>v.id===videoId?{...v,analysis:null}:v); saveState(); openVideoModal(videoId); };
+window.generateScriptOutline=async function(videoId){
+  const v=state.videos.find(x=>x.id===videoId); if(!v||!v.analysis) return;
+  const btn=document.getElementById('script-btn-'+videoId);
+  if(btn){btn.disabled=true;btn.textContent='⏳ Writing...';}
+  const ch=state.channels.find(c=>c.id===v.channelId);
+  const avg=v.scoreBreakdown?.avg20||(ch?.avgViews||50000);
+  const ctx=`Video: "${v.title}" by ${v.channelName}. Spike: ${v.scoreBreakdown?.spikeScore||0}× avg of ${fmtNum(avg)}.${v.transcript?' Transcript: '+v.transcript.substring(0,600):''}`;
+  try {
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':state.settings.claudeApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:900,system:'YouTube scriptwriter for TDUK (Firestick/streaming/VPN channel). Write complete detailed outlines. Never leave sections empty.',messages:[{role:'user',content:`Complete 6-8 min TDUK script outline for:\n${ctx}\n\nFor every section: one summary sentence + 3 bullet points:\n\nIntro (0:00-0:45):\nSummary:\n• \n• \n• \n\nSection 1 (0:45-2:30):\nSummary:\n• \n• \n• \n\nSection 2 (2:30-4:00):\nSummary:\n• \n• \n• \n\nSection 3 (4:00-5:30):\nSummary:\n• \n• \n• \n\nVPN Segment (5:30-6:30):\nSummary:\n• \n• \n• \n\nOutro (6:30-7:30):\nSummary:\n• \n• \n• `}]})});
+    const d=await r.json(); if(!r.ok) throw new Error(d.error?.message);
+    const {scriptSections}=parseScriptText(d.content?.[0]?.text||'');
+    const updatedAnalysis={...v.analysis,scriptSections};
+    state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:updatedAnalysis}:v2);
+    saveState();
+    const aa=document.getElementById('analysis-area-'+videoId);
+    if(aa) aa.innerHTML=renderAnalysisResult(updatedAnalysis,videoId);
+    notify('Script outline ready!','success');
+  } catch(e){
+    if(btn){btn.disabled=false;btn.textContent='📋 Generate Script Outline';}
+    notify('Script failed: '+e.message,'error');
+  }
+};
+
+window.clearAnalysis=function(videoId){
+  state.videos=state.videos.map(v=>v.id===videoId?{...v,analysis:null}:v);
+  saveState(); openVideoModal(videoId);
+};
 
 showPage('dashboard');
 </script>
