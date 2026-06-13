@@ -669,7 +669,7 @@ window.runAiAnalysis=async function(videoId){
       <div style="font-size:36px;margin-bottom:12px">🤖</div>
       <div style="font-size:14px;font-weight:700;margin-bottom:10px">${msg}</div>
       <div style="max-width:240px;margin:0 auto;background:var(--bg2);border-radius:4px;height:6px;overflow:hidden">
-        <div style="height:100%;background:#185fa5;border-radius:4px;width:${pct}%;transition:width .5s"></div>
+        <div style="height:100%;background:#4a9e2f;border-radius:4px;width:${pct}%;transition:width .5s"></div>
       </div>
     </div>`;
   };
@@ -691,7 +691,7 @@ window.runAiAnalysis=async function(videoId){
       body:JSON.stringify({
         model:'claude-haiku-4-5-20251001',
         max_tokens:maxTokens,
-        system: systemMsg,
+        system:systemMsg,
         messages:[{role:'user',content:userMsg}]
       })
     });
@@ -702,48 +702,105 @@ window.runAiAnalysis=async function(videoId){
 
   try {
     showStatus('Analysing strategy...', 30);
-
     const strategyText = await callAI(
-      'You are a YouTube strategy expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Give concise, actionable answers. No markdown formatting. No asterisks.',
-      `Analyse this competitor video for TDUK:\n${ctx}\n\nAnswer each section in 1-2 sentences maximum:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:`,
+      'You are a YouTube strategy expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Be concise. No markdown asterisks.',
+      `Analyse this competitor video for TDUK:\n${ctx}\n\nAnswer each in 1-2 sentences:\n\nWHY IT'S WORKING:\nMAIN HOOK:\nEMOTIONAL TRIGGER:\nRETENTION HOOKS:\n- \n- \n- \nTHUMBNAIL STRATEGY:\nTITLE STRATEGY:\nRISK LEVEL FOR TDUK:\nBEST TDUK ANGLE:\nVPN CTA ANGLE:`,
       600
     );
 
-    showStatus('Generating titles and thumbnails...', 55);
-
+    showStatus('Generating titles and thumbnails...', 70);
     const titlesText = await callAI(
-      'You are a YouTube title expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Give only the requested lists. No extra text.',
-      `Based on this video:\n${ctx}\n\nGive exactly:\n\n5 TDUK TITLE IDEAS:\n1.\n2.\n3.\n4.\n5.\n\n5 THUMBNAIL TEXT IDEAS:\n1.\n2.\n3.\n4.\n5.`,
+      'You are a YouTube title expert for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Output only the lists requested.',
+      `Based on this video:\n${ctx}\n\n5 TDUK TITLE IDEAS:\n1.\n2.\n3.\n4.\n5.\n\n5 THUMBNAIL TEXT IDEAS:\n1.\n2.\n3.\n4.\n5.`,
       300
-    );
-
-    showStatus('Writing script outline...', 80);
-
-    const scriptText = await callAI(
-      'You are a YouTube scriptwriter for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Write complete detailed script outlines. Never leave a section empty.',
-      `Write a complete 6-8 minute TDUK script outline for a video inspired by this topic:\n${ctx}\n\nIMPORTANT: Write 2-3 full sentences for EVERY section. Do not stop early. Complete all 6 sections.\n\nTDUK SCRIPT OUTLINE:\nIntro (0:00-0:45):\nSection 1 (0:45-2:30):\nSection 2 (2:30-4:00):\nSection 3 (4:00-5:30):\nVPN Segment (5:30-6:30):\nOutro (6:30-7:30):`,
-      1000
     );
 
     showStatus('Done!', 100);
 
-    // Parse each response SEPARATELY then combine into one object
     const strategy = parseStrategyText(strategyText);
     const titles = parseTitlesText(titlesText);
-    const script = parseScriptText(scriptText);
-
-    const parsed = { ...strategy, ...titles, ...script, raw: strategyText+'\n'+titlesText+'\n'+scriptText };
+    // Store context for script generation later
+    const parsed = { ...strategy, ...titles, scriptOutline:'', _ctx:ctx, raw: strategyText+'\n'+titlesText };
 
     state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:parsed}:v2);
     saveState();
     if(aa) aa.innerHTML=renderAnalysisResult(parsed,videoId);
-    notify('Analysis complete!','success');
+    notify('Analysis complete! Click "Generate Script Outline" when ready.','success');
 
   } catch(e){
     if(aa) aa.innerHTML=`<div style="text-align:center;padding:20px"><div style="color:#a32d2d;margin-bottom:12px;font-size:13px">⚠️ ${esc(e.message)}</div><button class="btn primary" onclick="runAiAnalysis('${videoId}')">Try again</button></div>`;
     notify('Failed: '+e.message,'error');
   }
 };
+
+window.generateScriptOutline=async function(videoId){
+  const v=state.videos.find(x=>x.id===videoId); if(!v||!v.analysis) return;
+  const btn=document.getElementById('script-btn-'+videoId);
+  const area=document.getElementById('script-area-'+videoId);
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Writing script...'; }
+  if(area) area.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Writing your script outline...</div>`;
+
+  const ctx = v.analysis._ctx || `Video: "${v.title}" by ${v.channelName}`;
+
+  try {
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':state.settings.claudeApiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1200,
+        system:'You are a YouTube scriptwriter for TDUK (Tech Doctor UK), a Firestick/streaming/VPN channel. Write complete, detailed script outlines. Every section needs 2-3 sentences. Never leave a section empty or incomplete.',
+        messages:[{role:'user',content:`Write a complete 6-8 minute TDUK script outline for a video based on:\n${ctx}\n\nWrite 2-3 full sentences for EVERY section below. Do not skip any section:\n\nIntro (0:00-0:45):\nSection 1 (0:45-2:30):\nSection 2 (2:30-4:00):\nSection 3 (4:00-5:30):\nVPN Segment (5:30-6:30):\nOutro (6:30-7:30):`}]
+      })
+    });
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.error?.message||'API error '+r.status);
+    const scriptText=d.content?.[0]?.text||'';
+
+    // Parse script sections
+    const labels=['Intro (0:00-0:45)','Section 1 (0:45-2:30)','Section 2 (2:30-4:00)','Section 3 (4:00-5:30)','VPN Segment (5:30-6:30)','Outro (6:30-7:30)'];
+    const sections=[];
+    for(let i=0;i<labels.length;i++){
+      const label=labels[i];
+      const next=labels[i+1];
+      const si=scriptText.indexOf(label+':');
+      if(si===-1) continue;
+      const cs=si+label.length+1;
+      const ei=next?scriptText.indexOf(next+':'):scriptText.length;
+      const body=scriptText.substring(cs,ei!==-1?ei:scriptText.length).trim();
+      sections.push({label,body});
+    }
+
+    const updatedAnalysis={...v.analysis,scriptOutline:sections.map(s=>s.label+': '+s.body).join('\n')};
+    state.videos=state.videos.map(v2=>v2.id===videoId?{...v2,analysis:updatedAnalysis}:v2);
+    saveState();
+
+    if(area){
+      if(sections.length){
+        area.innerHTML=sections.map(s=>`
+          <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)">
+            <div style="font-size:11px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">${esc(s.label)}</div>
+            <div style="font-size:13px;line-height:1.7;color:var(--text)">${esc(s.body)}</div>
+          </div>`).join('');
+      } else {
+        area.innerHTML=`<div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${esc(scriptText)}</div>`;
+      }
+    }
+    if(btn){ btn.textContent='✅ Script generated'; }
+    notify('Script outline ready!','success');
+
+  } catch(e){
+    if(area) area.innerHTML=`<div style="color:#a32d2d;font-size:13px">⚠️ ${esc(e.message)}</div>`;
+    if(btn){ btn.disabled=false; btn.textContent='📋 Generate Script Outline'; }
+    notify('Script failed: '+e.message,'error');
+  }
+};
+
 
 function extractSection(text, label){
   const lines = text.split('\n');
@@ -856,7 +913,33 @@ function renderAnalysisResult(a, videoId){
       <div style="padding:16px;border-right:0.5px solid var(--border)">
         ${lst('5 TDUK title ideas',a.titleIdeas,'📝')}${lst('5 thumbnail text ideas',a.thumbnailTexts,'🎨')}
       </div>
-      <div style="padding:16px">${scriptSection()}</div>
+      <div style="padding:16px">
+        <div class="analysis-section" style="border-bottom:none">
+          <div class="analysis-label" style="color:#4a9e2f">📋 TDUK script outline</div>
+          ${!a.scriptOutline ? `
+            <div style="text-align:center;padding:20px 0">
+              <div style="font-size:13px;color:var(--text2);margin-bottom:14px">Script outline is generated separately so it gets full detail and never gets cut off.</div>
+              <button class="btn success" id="script-btn-${videoId}" style="font-size:13px;padding:8px 18px" onclick="generateScriptOutline('${videoId}')">📋 Generate Script Outline</button>
+            </div>
+            <div id="script-area-${videoId}"></div>
+          ` : `
+            <div id="script-area-${videoId}">
+              ${(()=>{
+                const sections=a.scriptOutline.split('\n').filter(Boolean);
+                return sections.map(s=>{
+                  const ci=s.indexOf(':');
+                  if(ci>0&&ci<45){
+                    const label=s.substring(0,ci).trim();
+                    const body=s.substring(ci+1).trim();
+                    return '<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid var(--border)"><div style="font-size:11px;font-weight:700;color:#4a9e2f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px">'+esc(label)+'</div><div style="font-size:13px;line-height:1.7;color:var(--text)">'+esc(body)+'</div></div>';
+                  }
+                  return '<div style="font-size:13px;line-height:1.7;color:var(--text);margin-bottom:6px">'+esc(s)+'</div>';
+                }).join('');
+              })()}
+            </div>
+          `}
+        </div>
+      </div>
     </div>
     <div style="padding:10px 16px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end">
       <button class="btn danger" style="font-size:11px;padding:4px 10px" onclick="clearAnalysis('${videoId}')">🗑 Clear & regenerate</button>
